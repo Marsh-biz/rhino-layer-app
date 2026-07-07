@@ -117,12 +117,34 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     padding: 8px 10px;
     background: var(--panel-bg-deep);
     border-bottom: 1px solid var(--border);
   }
   .preset-bar label { color: var(--text-dim); font-size: 11.5px; margin-right: 2px; }
+  /* Two clearly separated clusters: preset controls | file (import/export) */
+  .pb-group { display: flex; align-items: center; gap: 6px; }
+  .pb-label {
+    color: var(--text-dim);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    margin-right: 2px;
+  }
+  .pb-divider {
+    width: 1px;
+    align-self: stretch;
+    min-height: 24px;
+    background: var(--border-light);
+    margin-left: auto; /* push the divider + file cluster to the right edge */
+  }
+  .preset-combo { position: relative; display: inline-flex; }
+  .preset-name-input { min-width: 150px; max-width: 220px; height: 26px; }
+  @media (max-width: 560px) {
+    .pb-divider { display: none; }
+    .pb-file { margin-left: 0; }
+  }
   select, input[type="text"] {
     background: var(--input-bg);
     color: var(--text);
@@ -152,6 +174,64 @@
   .btn:active { background: var(--btn-active); }
   .btn.danger:hover { background: var(--danger-hover-bg); border-color: var(--danger); }
   .spacer { flex: 1; }
+
+  /* Preset picker trigger (custom dropdown) */
+  .preset-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 150px;
+    max-width: 220px;
+    height: 26px;
+    background: var(--input-bg);
+    color: var(--text);
+    border: 1px solid var(--border-light);
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-size: 12.5px;
+    font-family: var(--font);
+    cursor: pointer;
+  }
+  .preset-trigger:hover { background: var(--input-hover); }
+  .preset-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .preset-trigger .dd-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .preset-trigger .dd-caret { flex: none; opacity: .65; }
+
+  /* Preset menu rows: star (default) · name (select) · pencil (rename) */
+  .preset-pop { padding: 4px; min-width: 240px; }
+  .preset-menu-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    border-radius: 3px;
+    padding: 1px 2px;
+  }
+  .preset-menu-row:hover { background: var(--hover-bg); }
+  .preset-menu-row.current { background: var(--row-selected); }
+  .pm-star, .pm-rename {
+    flex: none;
+    width: 26px; height: 26px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent; border: none; border-radius: 3px;
+    color: var(--text-dim); cursor: pointer;
+    font-size: 14px; line-height: 1;
+  }
+  .pm-star:hover, .pm-rename:hover { background: var(--ghost-hover); color: var(--text); }
+  .pm-star.on { color: #f0c000; }
+  .pm-star.on:hover { color: #f0c000; }
+  .pm-rename svg { width: 14px; height: 14px; display: block; }
+  .pm-name {
+    flex: 1;
+    text-align: left;
+    background: transparent; border: none;
+    color: var(--text); font-family: var(--font); font-size: 12.5px;
+    padding: 5px 6px; cursor: pointer;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    border-radius: 3px;
+  }
+  .pm-name:hover { text-decoration: underline; }
+  .pm-rename-input { flex: 1; font-size: 12.5px; padding: 3px 5px; min-width: 60px; }
+  .preset-menu-empty { padding: 8px 10px; color: var(--text-dim); font-size: 12px; white-space: nowrap; }
 
   /* Toolbar */
   .toolbar {
@@ -454,26 +534,38 @@
   }
 </style>
 </head>
-<body>
+<body class="light">
 <div class="panel">
   <div class="titlebar">
     <span class="rhino" aria-hidden="true"><svg viewBox="-551.1 -663.6 3405.8 3064.3" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" fill-rule="evenodd" d="M1521.049 1962.025 C1507.7 1957.799 1462.704 1935.711 1400.58 1900.41 C1344.693 1857.297 1275.862 1770.88 1207.031 1684.463 C1207.031 1684.463 1204.671 1733.371 1253.39 1830.532 C1265.202 1841.691 1315.771 1879.876 1389.329 1928.397 C1387.3 1936.009 1387.641 1950.703 1376.461 1977.341 C1368.01 1986.102 1339.959 1996.363 1300.303 2021.13 C1265.929 2064.096 1191.527 2173.594 1086.087 2303.361 C998.198 2360.758 764.126 2300.222 492.387 2210.988 C454.721 2182.289 307.081 2078.257 75.139 1873.78 C-9.162 1773.335 -134.735 1576.481 -288.665 1312.013 C-306.155 1270.31 -322.363 1129.093 -338.571 987.876 C-338.571 987.876 -345.184 1030.487 -351.797 1073.098 C-358.409 1115.71 -354.179 1240.624 -349.949 1365.538 C-349.949 1365.538 -426.097 1276.532 -493.635 1084.211 C-485.026 980.897 -511.057 847.786 -495.049 518.494 C-453.01 322.313 -365.404 43.117 -203.431 -301.316 C-103.009 -389.411 110.507 -506.501 324.023 -623.591 C324.023 -623.591 358.461 -589.153 392.899 -554.715 C427.337 -520.277 512.36 -423.005 597.383 -325.733 C597.383 -325.733 563.073 -332.603 458.381 -330.767 C403.507 -323.979 309.376 -273.699 215.245 -223.419 C215.245 -223.419 254.697 -248.067 321.47 -278.914 C366.053 -289.03 514.046 -285.557 662.039 -282.084 C662.039 -282.084 712.715 -290.727 805.447 -317.281 C871.888 -345.578 1087.543 -465.058 1303.198 -584.538 C1303.198 -584.538 1265.89 -429.566 1178.36 -210.023 C1128.138 -145.451 1028.989 -66.67 929.84 12.111 C929.84 12.111 938.449 88.162 947.058 164.213 C955.668 240.264 959.811 348.331 965.791 536.295 C967.628 616.191 1015.394 752.184 1063.16 888.177 C1063.16 888.177 1030.834 913.891 991.161 955.768 C983.814 971.931 980.875 1024.094 977.936 1076.257 C977.936 1076.257 980.14 1053.481 995.568 1013.073 C1008.793 995.441 1050.156 978.804 1091.519 962.167 C1091.519 962.167 1107.213 966.651 1243.979 955.441 C1365.051 939.746 1571.321 829.884 1777.591 720.022 C1777.591 720.022 1766.381 785.042 1710.329 937.503 C1665.488 1024.944 1539.933 1195.341 1414.378 1365.738 C1414.378 1365.738 1512.707 1450.007 1887.132 1454.491 C2106.221 1391.18 2460.468 1209.573 2814.715 1027.966 C2814.715 1027.966 2720.732 1204.527 2451.684 1520.658 C2295.055 1645.531 1884.846 1857.335 1447.344 2080.667 Z M1060.08 1426.845 C1060.08 1426.845 1057.729 1400.985 1024.228 1361.019 C993.077 1346.913 943.896 1340.134 880.675 1326.748 C864.881 1319.317 844.642 1306.254 824.403 1293.191 C824.403 1293.191 838.509 1325.517 862.019 1370.774 C871.423 1383.704 892.784 1409.277 937.495 1433.374 C947.355 1432.751 968.537 1427.943 1000.707 1422.521 C1009.374 1422.037 1025.944 1424.52 1042.514 1427.003 Z"/></svg></span>
     <span>Layers</span>
-    <span class="sub">Rhino 8 emulator · layer standards drafting</span>
+    <span class="sub">Rhino 8 emulator · build and share layer templates</span>
     <button class="tool" id="themeToggle" data-tip="Light mode"></button>
   </div>
 
   <div class="preset-bar">
-    <label for="presetSelect">Preset</label>
-    <select id="presetSelect" style="min-width:130px"></select>
-    <button class="btn" id="loadPresetBtn">Load</button>
-    <button class="btn danger" id="deletePresetBtn">Delete</button>
-    <span class="spacer"></span>
-    <input type="text" id="presetName" placeholder="Preset name…" style="width:140px">
-    <button class="btn" id="savePresetBtn">Save preset</button>
-    <button class="btn" id="exportRhinoBtn" title="Download the current table as a Rhino Layer_Export.json">⤓ JSON</button>
-    <button class="btn" id="importPresetsBtn" title="Import a preset file or a Rhino Layer_Export.json">⤒ JSON</button>
-    <input type="file" id="importFile" accept="application/json" style="display:none">
+    <div class="pb-group pb-presets">
+      <label class="pb-label" for="presetTrigger">Presets</label>
+      <div class="preset-combo" id="presetCombo">
+        <button type="button" class="preset-trigger" id="presetTrigger" aria-haspopup="menu" title="Choose a preset · click a star to set the startup default · pencil to rename">
+          <span class="dd-label" id="presetTriggerLabel">— no presets yet —</span>
+          <svg class="dd-caret" width="8" height="8" viewBox="0 0 8 8" fill="currentColor" aria-hidden="true"><path d="M1 2.5h6L4 6z"/></svg>
+        </button>
+        <input type="text" id="presetName" class="preset-name-input" placeholder="Name this preset…" style="display:none">
+      </div>
+      <button class="btn" id="loadPresetBtn">Load</button>
+      <button class="btn" id="savePresetBtn">Save</button>
+      <button class="btn danger" id="deletePresetBtn">Delete</button>
+    </div>
+
+    <span class="pb-divider" aria-hidden="true"></span>
+
+    <div class="pb-group pb-file">
+      <label class="pb-label">File</label>
+      <button class="btn" id="exportRhinoBtn" title="Download the current table as a Rhino Layer_Export.json">⤓ Export</button>
+      <button class="btn" id="importPresetsBtn" title="Import a Rhino Layer_Export.json or a saved preset file">⤒ Import</button>
+      <input type="file" id="importFile" accept="application/json" style="display:none">
+    </div>
   </div>
 
   <div class="toolbar">
@@ -547,6 +639,7 @@
     return label;
   }
   const STORAGE_KEY = "rhino-layer-emulator-presets";
+  const DEFAULT_PRESET_KEY = "rhino-layer-emulator-default-preset";
 
   let uid = 0;
   const newId = () => "L" + (++uid) + "_" + Date.now().toString(36);
@@ -570,6 +663,7 @@
   let selectedId = root.children[0].id;
   let editingId = null;
   let presets = {}; // name -> serialized tree
+  let defaultPresetName = null; // shared startup preset (loads on refresh)
   let layerCounter = 0;
   let dragId = null;
 
@@ -671,12 +765,50 @@
     persistPresets();
   }
 
+  // ---- Shared startup default preset ----
+  async function loadDefaultPreset() {
+    if (apiMode) {
+      try {
+        const r = await fetch("api/default-preset");
+        if (r.ok) { const j = await r.json(); defaultPresetName = (j && j.name) || null; }
+      } catch (e) { /* leave null */ }
+      return;
+    }
+    try {
+      if (window.storage && window.storage.get) {
+        const res = await window.storage.get(DEFAULT_PRESET_KEY);
+        if (res && res.value) defaultPresetName = res.value;
+      }
+    } catch (e) { /* leave null */ }
+  }
+  async function persistDefaultPreset() {
+    if (apiMode) {
+      try {
+        const r = await fetch("api/default-preset", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: defaultPresetName })
+        });
+        if (!r.ok) say("Server rejected the default (" + r.status + ")", 5000);
+      } catch (e) { say("Couldn't reach the server — default not saved", 5000); }
+      return;
+    }
+    try {
+      if (window.storage && window.storage.set) {
+        await window.storage.set(DEFAULT_PRESET_KEY, defaultPresetName || "");
+      }
+    } catch (e) { /* in-memory only */ }
+  }
+
   // ---- DOM refs ----
   const rowsEl = document.getElementById("rows");
   const countInfo = document.getElementById("countInfo");
   const flash = document.getElementById("flash");
-  const presetSelect = document.getElementById("presetSelect");
+  const presetCombo = document.getElementById("presetCombo");
+  const presetTrigger = document.getElementById("presetTrigger");
+  const presetTriggerLabel = document.getElementById("presetTriggerLabel");
   const presetNameInput = document.getElementById("presetName");
+  let selectedPresetName = null; // which preset Load/Delete act on
   const overlay = document.getElementById("overlay");
   const modalTitle = document.getElementById("modalTitle");
   const modalBody = document.getElementById("modalBody");
@@ -1055,6 +1187,8 @@
     document.removeEventListener("mousedown", onDocMouseDown, true);
   }
   function onDocMouseDown(e) {
+    // Ignore clicks on the preset trigger so it can toggle its own menu.
+    if (e.target.closest && e.target.closest("#presetTrigger")) return;
     if (openPop && !openPop.contains(e.target)) closeDropdown();
   }
   function openDropdown(trigger, values, current, renderItem, onSelect, popClass) {
@@ -1092,33 +1226,191 @@
   }
 
   // ---- Presets ----
+  function presetNames() {
+    return Object.keys(presets).sort((a, b) => a.localeCompare(b));
+  }
+
+  // Refresh the trigger label + keep the current selection valid.
+  // (The star/rename controls live inside the menu itself.)
   function renderPresetSelect() {
-    presetSelect.innerHTML = "";
-    const names = Object.keys(presets).sort((a, b) => a.localeCompare(b));
+    const names = presetNames();
+    if (selectedPresetName && !presets[selectedPresetName]) selectedPresetName = null;
+    if (!selectedPresetName && names.length) {
+      selectedPresetName = (defaultPresetName && presets[defaultPresetName]) ? defaultPresetName : names[0];
+    }
     if (!names.length) {
-      const o = document.createElement("option");
-      o.value = ""; o.textContent = "— no presets yet —";
-      presetSelect.appendChild(o);
+      presetTriggerLabel.textContent = "— no presets yet —";
+    } else {
+      presetTriggerLabel.textContent = (selectedPresetName === defaultPresetName ? "★ " : "") + selectedPresetName;
+    }
+    if (openPop && openPop.dataset.owner === "preset") renderPresetMenu();
+  }
+
+  const PENCIL_SVG = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.4 2.6l2 2L6 12l-2.7.7L4 10z"/><path d="M10.2 3.8l2 2"/></svg>';
+
+  function renderPresetMenu() {
+    if (!openPop || openPop.dataset.owner !== "preset") return;
+    const pop = openPop;
+    pop.innerHTML = "";
+    const names = presetNames();
+    if (!names.length) {
+      const e = document.createElement("div");
+      e.className = "preset-menu-empty";
+      e.textContent = "No presets saved yet.";
+      pop.appendChild(e);
       return;
     }
-    for (const n of names) {
-      const o = document.createElement("option");
-      o.value = n; o.textContent = n;
-      presetSelect.appendChild(o);
+    for (const name of names) {
+      const row = document.createElement("div");
+      row.className = "preset-menu-row" + (name === selectedPresetName ? " current" : "");
+
+      // Star → toggle the shared startup default (stays open so you can see it)
+      const isDef = name === defaultPresetName;
+      const star = document.createElement("button");
+      star.type = "button";
+      star.className = "pm-star" + (isDef ? " on" : "");
+      star.textContent = isDef ? "★" : "☆";
+      star.title = isDef ? "Loads on startup — click to unset" : "Set as the startup default (shared with everyone)";
+      star.addEventListener("mousedown", (e) => e.stopPropagation());
+      star.addEventListener("click", (e) => {
+        e.stopPropagation();
+        setDefaultPreset(isDef ? null : name);
+        renderPresetMenu();
+      });
+      row.appendChild(star);
+
+      // Name → select this preset for Load/Delete, then close
+      const nameBtn = document.createElement("button");
+      nameBtn.type = "button";
+      nameBtn.className = "pm-name";
+      nameBtn.textContent = name;
+      nameBtn.title = "Select “" + name + "”";
+      nameBtn.addEventListener("mousedown", (e) => e.stopPropagation());
+      nameBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        selectedPresetName = name;
+        renderPresetSelect();
+        closeDropdown();
+      });
+      row.appendChild(nameBtn);
+
+      // Pencil → rename inline
+      const ren = document.createElement("button");
+      ren.type = "button";
+      ren.className = "pm-rename";
+      ren.innerHTML = PENCIL_SVG;
+      ren.title = "Rename “" + name + "”";
+      ren.addEventListener("mousedown", (e) => e.stopPropagation());
+      ren.addEventListener("click", (e) => {
+        e.stopPropagation();
+        beginRenameInMenu(row, name);
+      });
+      row.appendChild(ren);
+
+      pop.appendChild(row);
     }
   }
 
-  function savePreset() {
+  function beginRenameInMenu(row, oldName) {
+    const nameBtn = row.querySelector(".pm-name");
+    if (!nameBtn) return;
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "pm-rename-input";
+    input.value = oldName;
+    const commit = () => {
+      const v = input.value.trim();
+      if (!v || v === oldName) { renderPresetMenu(); return; }
+      if (presets[v]) { say("A preset named “" + v + "” already exists"); input.focus(); input.select(); return; }
+      renamePreset(oldName, v);
+    };
+    input.addEventListener("mousedown", (e) => e.stopPropagation());
+    input.addEventListener("click", (e) => e.stopPropagation());
+    input.addEventListener("keydown", (e) => {
+      e.stopPropagation();
+      if (e.key === "Enter") { e.preventDefault(); commit(); }
+      else if (e.key === "Escape") { e.preventDefault(); renderPresetMenu(); }
+    });
+    row.replaceChild(input, nameBtn);
+    setTimeout(() => { input.focus(); input.select(); }, 0);
+  }
+
+  function openPresetMenu() {
+    if (openPop && openPop.dataset.owner === "preset") { closeDropdown(); return; }
+    closeDropdown();
+    const pop = document.createElement("div");
+    pop.className = "dd-pop preset-pop";
+    pop.dataset.owner = "preset";
+    openPop = pop;
+    document.body.appendChild(pop);
+    renderPresetMenu();
+    const r = presetTrigger.getBoundingClientRect();
+    pop.style.minWidth = Math.max(240, r.width) + "px";
+    let top = r.bottom + 3;
+    if (top + pop.offsetHeight > window.innerHeight - 8) top = Math.max(8, r.top - pop.offsetHeight - 3);
+    let left = r.left;
+    if (left + pop.offsetWidth > window.innerWidth - 8) left = Math.max(8, window.innerWidth - 8 - pop.offsetWidth);
+    pop.style.top = top + "px";
+    pop.style.left = left + "px";
+    const cur = pop.querySelector(".preset-menu-row.current");
+    if (cur) cur.scrollIntoView({ block: "nearest" });
+    setTimeout(() => document.addEventListener("mousedown", onDocMouseDown, true), 0);
+  }
+
+  function setDefaultPreset(name) {
+    if (name && !presets[name]) return;
+    if (defaultPresetName === (name || null)) return;
+    defaultPresetName = name || null;
+    persistDefaultPreset();
+    renderPresetSelect();
+    say(name ? "“" + name + "” will load on startup for everyone" : "Startup default cleared");
+  }
+
+  async function renamePreset(oldName, newName) {
+    if (!presets[oldName] || presets[newName]) return;
+    presets[newName] = presets[oldName];
+    delete presets[oldName];
+    const wasDefault = defaultPresetName === oldName;
+    if (wasDefault) defaultPresetName = newName;
+    if (selectedPresetName === oldName) selectedPresetName = newName;
+    // Save the new name and promote the default BEFORE deleting the old one, so
+    // the server's "clear default on delete" never wipes a still-wanted default.
+    await persistPresetOne(newName);
+    if (wasDefault) await persistDefaultPreset();
+    await removePresetOne(oldName);
+    renderPresetSelect();
+    say("Renamed to “" + newName + "”");
+  }
+
+  // Inline save: the Save button turns the combobox into a name field in place
+  // (the dropdown menu never opens), Enter commits, Esc cancels.
+  function beginInlineSave() {
+    if (presetCombo.classList.contains("naming")) { presetNameInput.focus(); return; }
+    closeDropdown();
+    presetCombo.classList.add("naming");
+    presetTrigger.style.display = "none";
+    presetNameInput.style.display = "";
+    presetNameInput.value = "";
+    setTimeout(() => presetNameInput.focus(), 0);
+  }
+  function endInlineSave() {
+    if (!presetCombo.classList.contains("naming")) return;
+    presetCombo.classList.remove("naming");
+    presetNameInput.style.display = "none";
+    presetNameInput.value = "";
+    presetTrigger.style.display = "";
+  }
+  function commitInlineSave() {
     const name = presetNameInput.value.trim();
-    if (!name) { say("Give the preset a name first"); presetNameInput.focus(); return; }
+    if (!name) { endInlineSave(); return; }
     const write = () => {
       presets[name] = serializeTree();
       persistPresetOne(name);
+      selectedPresetName = name;
       renderPresetSelect();
-      presetSelect.value = name;
-      presetNameInput.value = "";
       say("Saved preset “" + name + "”");
     };
+    endInlineSave();
     if (presets[name]) {
       askConfirm("Overwrite preset?", "A preset named “" + name + "” already exists. Saving replaces it.", write);
     } else {
@@ -1127,7 +1419,7 @@
   }
 
   function loadPreset() {
-    const name = presetSelect.value;
+    const name = selectedPresetName;
     if (!name || !presets[name]) { say("No preset selected"); return; }
     askConfirm(
       "Load “" + name + "”?",
@@ -1142,11 +1434,13 @@
   }
 
   function deletePreset() {
-    const name = presetSelect.value;
+    const name = selectedPresetName;
     if (!name || !presets[name]) { say("No preset selected"); return; }
     askConfirm("Delete preset?", "“" + name + "” will be removed from your saved presets.", () => {
       delete presets[name];
       removePresetOne(name);
+      if (defaultPresetName === name) defaultPresetName = null; // server clears it too
+      if (selectedPresetName === name) selectedPresetName = null;
       renderPresetSelect();
       say("Deleted preset “" + name + "”");
     });
@@ -1312,16 +1606,24 @@
   document.getElementById("downBtn").addEventListener("click", () => moveSelected(1));
   document.getElementById("indentBtn").addEventListener("click", indentSelected);
   document.getElementById("outdentBtn").addEventListener("click", outdentSelected);
-  document.getElementById("savePresetBtn").addEventListener("click", savePreset);
+  document.getElementById("savePresetBtn").addEventListener("click", beginInlineSave);
   document.getElementById("loadPresetBtn").addEventListener("click", loadPreset);
   document.getElementById("deletePresetBtn").addEventListener("click", deletePreset);
+  presetTrigger.addEventListener("click", (e) => { e.stopPropagation(); openPresetMenu(); });
+  presetTrigger.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") { e.preventDefault(); openPresetMenu(); }
+  });
   document.getElementById("exportRhinoBtn").addEventListener("click", exportRhino);
   document.getElementById("importPresetsBtn").addEventListener("click", () => document.getElementById("importFile").click());
   document.getElementById("importFile").addEventListener("change", (e) => {
     if (e.target.files && e.target.files[0]) importPresets(e.target.files[0]);
     e.target.value = "";
   });
-  presetNameInput.addEventListener("keydown", (e) => { if (e.key === "Enter") savePreset(); });
+  presetNameInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); commitInlineSave(); }
+    else if (e.key === "Escape") { e.preventDefault(); endInlineSave(); }
+  });
+  presetNameInput.addEventListener("blur", () => { endInlineSave(); });
 
   // Drop on empty space below the rows → move to root level (end of table)
   rowsEl.addEventListener("scroll", closeDropdown);
@@ -1428,7 +1730,7 @@
   const ICON_SUN = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="8" cy="8" r="3.2"/><path d="M8 1.2v1.8M8 13v1.8M1.2 8H3M13 8h1.8M3.2 3.2l1.3 1.3M11.5 11.5l1.3 1.3M12.8 3.2l-1.3 1.3M4.5 11.5l-1.3 1.3"/></svg>';
   const ICON_MOON = '<svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.4 9.9A5.6 5.6 0 0 1 6.1 2.6 5.9 5.9 0 1 0 13.4 9.9z"/></svg>';
   const themeBtn = document.getElementById("themeToggle");
-  let isLight = false;
+  let isLight = true; // light mode is the default
 
   function applyTheme() {
     document.body.classList.toggle("light", isLight);
@@ -1446,16 +1748,28 @@
     try {
       if (window.storage && window.storage.get) {
         const res = await window.storage.get(THEME_KEY);
-        if (res && res.value === "light") { isLight = true; }
+        if (res && res.value === "dark") { isLight = false; }
+        else if (res && res.value === "light") { isLight = true; }
       }
-    } catch (e) { /* default dark */ }
+    } catch (e) { /* default light */ }
     applyTheme();
   })();
 
   // ---- Init ----
   applyCols();
   render();
-  loadPresets();
+  (async function init() {
+    await loadPresets();        // populates presets, sets apiMode, renders the select
+    await loadDefaultPreset();  // reads the shared startup default
+    if (defaultPresetName && presets[defaultPresetName]) {
+      hydrateTree(presets[defaultPresetName]);
+      editingId = null;
+      render();
+      selectedPresetName = defaultPresetName;
+      say("Loaded default preset “" + defaultPresetName + "”");
+    }
+    renderPresetSelect();       // reflect the ★ marker + current selection in the trigger
+  })();
 })();
 </script>
 </body>
