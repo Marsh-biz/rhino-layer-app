@@ -1,52 +1,85 @@
 # Rhino 8 Layer Emulator
 
-A small Express server that serves the layer emulator and a Postgres-backed
-preset API so the whole team shares one preset library.
+A web app that recreates the Rhino 8 **Layers** panel so you can build, refine, and
+share layer templates ("standards") outside of Rhino — then round-trip them through
+Rhino's native `Layer_Export.json` format.
 
-## Structure
-- `server.js` — Express app: static site + `/api/presets` REST API
-- `public/index.html` — the emulator (API-first storage, falls back gracefully)
-- Postgres table `presets(name TEXT PK, tree JSONB, updated_at)` is created
-  automatically on first boot.
+It runs as a small Node/Express server with an optional PostgreSQL-backed preset
+library, so a group can work from one shared set of templates. Without a database it
+still runs fully in memory.
 
-## Deploy on Railway
+## Features
 
-1. **Add Postgres to the project**
-   In your Railway project: `+ New` → `Database` → `Add PostgreSQL`.
+- **Rhino-style layer table** — name tree with color, linetype, and print-width columns.
+- **Full editing** — add layers and sublayers, rename, delete, reorder, drag-to-nest,
+  and indent / outdent.
+- **Named presets** — save the current table as a template, then load, rename, or delete
+  presets from a dropdown menu.
+- **Shared startup default** — star a preset to have it load automatically on refresh.
+- **Auto-save** — an opt-in toggle writes edits back to the loaded preset as you work.
+- **Rhino import / export** — read and write Rhino `Layer_Export.json` files, preserving
+  the original layer records for a clean round-trip.
+- **Light / dark themes.**
 
-2. **Give the service the connection string**
-   Open your (empty) service → `Variables` → `New Variable` → `Add Reference`
-   → pick the Postgres service's `DATABASE_URL`. This creates
-   `DATABASE_URL = ${{Postgres.DATABASE_URL}}` on your service.
+## Tech stack
 
-3. **Deploy this folder** (either way works)
-   - **CLI:** `npm i -g @railway/cli`, then from this folder:
-     `railway login` → `railway link` (pick your project + service) → `railway up`
-   - **GitHub:** push this folder to a repo, then in the service:
-     `Settings` → `Source` → `Connect Repo`. Railway autodetects Node and runs
-     `npm install` + `npm start`.
+- **Backend:** Node.js + [Express](https://expressjs.com/)
+- **Database:** PostgreSQL via [`pg`](https://node-postgres.com/) — optional, with an
+  in-memory fallback so the app runs with zero external dependencies
+- **Frontend:** a single self-contained `public/index.html` — vanilla HTML, CSS, and
+  JavaScript, no framework and no build step
+- **Interchange format:** Rhino 8 `Layer_Export.json`
 
-4. **Expose it**
-   Service → `Settings` → `Networking` → `Generate Domain`.
-   You'll get `https://<something>.up.railway.app`.
+## Getting started
 
-5. **Embed in Notion**
-   In Notion type `/embed` and paste the Railway URL.
-
-## Local development
-```
+```bash
 npm install
-npm start          # http://localhost:3000 (in-memory presets, no DB needed)
-DATABASE_URL=postgres://... npm start   # against a real database
+npm start          # http://localhost:3000
 ```
+
+By default the app stores presets in memory (they reset when the server restarts).
+To persist them, provide a PostgreSQL connection string:
+
+```bash
+DATABASE_URL=postgres://user:pass@host:5432/dbname npm start
+```
+
+The required tables are created automatically on startup — no migrations to run.
+
+## Configuration
+
+| Variable        | Required | Description                                                                 |
+| --------------- | -------- | --------------------------------------------------------------------------- |
+| `DATABASE_URL`  | No       | PostgreSQL connection string. When set, presets and the shared default are persisted; otherwise data is kept in memory. |
+| `PORT`          | No       | Port to listen on. Defaults to `3000`.                                      |
+
+## Project structure
+
+- `server.js` — Express app: serves the static site and the preset REST API.
+- `public/index.html` — the entire client (UI, state, storage, Rhino import/export).
 
 ## API
-- `GET    /api/presets`        → `{ presets: { "<name>": [tree…] } }`
-- `PUT    /api/presets/:name`  → body `{ tree: [...] }` (upsert)
-- `DELETE /api/presets/:name`
-- `GET    /healthz`            → `{ ok, db }`
 
-## Note on access
-There is no authentication — anyone with the URL can read and edit presets.
-Fine for an internal team link; if the URL will circulate wider, add an access
-key check before shipping it around.
+| Method   | Route                  | Description                                            |
+| -------- | ---------------------- | ------------------------------------------------------ |
+| `GET`    | `/api/presets`         | List all presets → `{ presets: { "<name>": [tree…] } }` |
+| `PUT`    | `/api/presets/:name`   | Create or update a preset — body `{ tree: [...] }`     |
+| `DELETE` | `/api/presets/:name`   | Delete a preset                                        |
+| `GET`    | `/api/default-preset`  | Get the shared startup default → `{ name }`            |
+| `PUT`    | `/api/default-preset`  | Set the startup default — body `{ name }` (or `null` to clear) |
+| `GET`    | `/healthz`             | Health check → `{ ok, db }`                            |
+
+## Data storage
+
+When `DATABASE_URL` is set, two tables are created automatically:
+
+- `presets(name TEXT PRIMARY KEY, tree JSONB, updated_at TIMESTAMPTZ)`
+- `settings(key TEXT PRIMARY KEY, value TEXT)` — holds app-wide settings such as the
+  shared default preset.
+
+Layer trees are stored as JSON, so new fields added to a layer don't require schema changes.
+
+## Notes
+
+There is **no authentication** — anyone who can reach the server can view and edit
+presets. Add an access-control layer before exposing it beyond a trusted environment.

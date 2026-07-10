@@ -145,6 +145,18 @@
     .pb-divider { display: none; }
     .pb-file { margin-left: 0; }
   }
+
+  /* Auto-save toggle switch */
+  .switch { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; font-size: 12px; color: var(--text-dim); margin-left: 4px; }
+  .switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+  .switch-track { width: 30px; height: 16px; border-radius: 9px; background: var(--border-light); position: relative; transition: background .15s; flex: none; }
+  .switch-thumb { position: absolute; top: 2px; left: 2px; width: 12px; height: 12px; border-radius: 50%; background: #fff; transition: left .15s; box-shadow: 0 1px 2px rgba(0,0,0,.4); }
+  .switch input:checked + .switch-track { background: var(--accent); }
+  .switch input:checked + .switch-track .switch-thumb { left: 16px; }
+  .switch input:focus-visible + .switch-track { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .switch-label { white-space: nowrap; }
+  .switch.disabled { opacity: .4; cursor: not-allowed; }
+  .switch.disabled .switch-track { cursor: not-allowed; }
   select, input[type="text"] {
     background: var(--input-bg);
     color: var(--text);
@@ -495,13 +507,30 @@
     overflow: hidden;
   }
   .statusbar #countInfo { flex: none; }
+  .statusbar .statusbar-hint { flex: none; }
   .statusbar .flash {
-    color: var(--accent);
-    margin-left: auto;
     transition: opacity .4s;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* Layer/action feedback — blue, takes the flexible middle */
+  .statusbar .action-flash {
+    color: var(--accent);
+    margin-left: auto;
     min-width: 0;
+    text-align: right;
+  }
+  /* Save feedback — green (success) / red (error), pinned to the far right */
+  .statusbar .save-flash {
+    flex: none;
+    max-width: 45%;
+    color: #3f9a55;
+  }
+  body:not(.light) .statusbar .save-flash { color: #6cc07f; }
+  .statusbar .save-flash.err { color: var(--danger); }
+  @media (max-width: 620px) {
+    .statusbar .statusbar-hint { display: none; }
   }
 
   /* Modal */
@@ -554,8 +583,13 @@
         <input type="text" id="presetName" class="preset-name-input" placeholder="Name this preset…" style="display:none">
       </div>
       <button class="btn" id="loadPresetBtn">Load</button>
-      <button class="btn" id="savePresetBtn">Save</button>
+      <button class="btn" id="savePresetBtn" title="Save the current table as a new named preset">Save As</button>
       <button class="btn danger" id="deletePresetBtn">Delete</button>
+      <label class="switch" id="autosaveSwitch" title="Auto-save edits back to the loaded preset. Turn off to experiment without changing it.">
+        <input type="checkbox" id="autosaveToggle" autocomplete="off">
+        <span class="switch-track"><span class="switch-thumb"></span></span>
+        <span class="switch-label">Auto-save</span>
+      </label>
     </div>
 
     <span class="pb-divider" aria-hidden="true"></span>
@@ -604,8 +638,9 @@
 
   <div class="statusbar">
     <span id="countInfo"></span>
-    <span>Drag to nest · double-click to rename</span>
-    <span class="flash" id="flash"></span>
+    <span class="statusbar-hint">Drag to nest · double-click to rename</span>
+    <span class="flash action-flash" id="flash"></span>
+    <span class="flash save-flash" id="saveFlash"></span>
   </div>
 </div>
 
@@ -666,6 +701,11 @@
   let defaultPresetName = null; // shared startup preset (loads on refresh)
   let layerCounter = 0;
   let dragId = null;
+
+  // ---- Auto-save state ----
+  let linkedPresetName = null;   // the preset the current table is bound to (null = scratch)
+  let autosaveEnabled = false;   // session toggle (default off); edits write back to the linked preset
+  let autosaveTimer = null;
 
   // ---- Tree helpers ----
   function findWithParent(node, id, parent) {
@@ -749,11 +789,12 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ tree: presets[name] })
         });
-        if (!r.ok) say("Server rejected the save (" + r.status + ")", 5000);
-      } catch (e) { say("Couldn't reach the server — preset saved locally only", 5000); }
-      return;
+        if (!r.ok) { saySave("Server rejected the save (" + r.status + ")", true, 5000); return false; }
+        return true;
+      } catch (e) { saySave("Couldn't reach the server — saved locally only", true, 5000); return false; }
     }
     persistPresets();
+    return true;
   }
   async function removePresetOne(name) {
     if (apiMode) {
@@ -763,6 +804,52 @@
       return;
     }
     persistPresets();
+  }
+
+  // ---- Auto-save engine ----
+  // Binds the current table to a preset; edits then write back to it (debounced).
+  // Feedback is transient: a brief flash confirms each save (no persistent chip).
+  function setLinkedPreset(name) {
+    linkedPresetName = name || null;
+    clearTimeout(autosaveTimer);
+    if (!linkedPresetName) autosaveEnabled = false; // nothing to auto-save to
+    updateAutosaveToggle();
+  }
+  // Called by every layer mutation. Schedules a debounced write to the linked preset.
+  function markDirty() {
+    if (!linkedPresetName || !autosaveEnabled) return;
+    clearTimeout(autosaveTimer);
+    autosaveTimer = setTimeout(flushAutosave, 700);
+  }
+  async function flushAutosave() {
+    if (!linkedPresetName || !autosaveEnabled) return;
+    const name = linkedPresetName;
+    presets[name] = serializeTree();
+    const ok = await persistPresetOne(name); // flashes its own error on failure
+    if (ok && linkedPresetName === name) saySave("Saved to “" + name + "” ✓");
+  }
+  function updateAutosaveToggle() {
+    if (!autosaveToggle) return;
+    const linked = !!linkedPresetName;
+    autosaveToggle.disabled = !linked; // can't arm auto-save with no preset to save to
+    autosaveToggle.checked = autosaveEnabled;
+    const sw = autosaveToggle.closest(".switch");
+    if (sw) {
+      sw.classList.toggle("disabled", !linked);
+      sw.title = linked
+        ? "Auto-save edits back to the loaded preset. Turn off to experiment without changing it."
+        : "Load or save a preset first to enable auto-save.";
+    }
+  }
+  function toggleAutosave() {
+    if (!linkedPresetName) { autosaveToggle.checked = false; autosaveEnabled = false; return; }
+    autosaveEnabled = autosaveToggle.checked;
+    if (autosaveEnabled) {
+      flushAutosave(); // saves current state + flashes "Saved …" on success
+    } else {
+      clearTimeout(autosaveTimer);
+      say("Auto-save paused — changes won’t be saved");
+    }
   }
 
   // ---- Shared startup default preset ----
@@ -804,10 +891,12 @@
   const rowsEl = document.getElementById("rows");
   const countInfo = document.getElementById("countInfo");
   const flash = document.getElementById("flash");
+  const saveFlash = document.getElementById("saveFlash");
   const presetCombo = document.getElementById("presetCombo");
   const presetTrigger = document.getElementById("presetTrigger");
   const presetTriggerLabel = document.getElementById("presetTriggerLabel");
   const presetNameInput = document.getElementById("presetName");
+  const autosaveToggle = document.getElementById("autosaveToggle");
   let selectedPresetName = null; // which preset Load/Delete act on
   const overlay = document.getElementById("overlay");
   const modalTitle = document.getElementById("modalTitle");
@@ -815,12 +904,22 @@
   const modalConfirm = document.getElementById("modalConfirm");
   const modalCancel = document.getElementById("modalCancel");
 
+  // Two independent feedback channels so layer-action and save messages don't
+  // overwrite each other: say() = blue action flash, saySave() = green/red save flash.
   let flashTimer = null;
   function say(msg, ms) {
     flash.textContent = msg;
     flash.style.opacity = "1";
     clearTimeout(flashTimer);
     flashTimer = setTimeout(() => { flash.style.opacity = "0"; }, ms || 2200);
+  }
+  let saveFlashTimer = null;
+  function saySave(msg, isError, ms) {
+    saveFlash.textContent = msg;
+    saveFlash.classList.toggle("err", !!isError);
+    saveFlash.style.opacity = "1";
+    clearTimeout(saveFlashTimer);
+    saveFlashTimer = setTimeout(() => { saveFlash.style.opacity = "0"; }, ms || 2200);
   }
 
   let confirmCb = null;
@@ -925,9 +1024,11 @@
       input.value = layer.name;
       const commit = () => {
         const v = input.value.trim();
+        const changed = v && v !== layer.name;
         if (v) layer.name = v;
         editingId = null;
         render();
+        if (changed) markDirty();
       };
       input.addEventListener("keydown", (e) => {
         if (e.key === "Enter") commit();
@@ -967,7 +1068,12 @@
     colorInput.addEventListener("input", () => {
       layer.color = colorInput.value;
       swatch.style.background = layer.color;
+      markDirty();
     });
+    // Stop mousedown from bubbling to the row's select handler — otherwise the
+    // row re-renders and replaces this input mid-click, so the picker only opens
+    // on the second click (like the linetype/print-width controls already do).
+    colorInput.addEventListener("mousedown", (e) => e.stopPropagation());
     colorInput.addEventListener("click", (e) => e.stopPropagation());
     swatch.appendChild(colorInput);
     swatchCell.appendChild(swatch);
@@ -986,7 +1092,7 @@
       e.stopPropagation();
       openDropdown(ltBtn, LINETYPES, layer.linetype,
         (v) => ltPreviewSVG(v, 48),
-        (v) => { layer.linetype = v; render(); });
+        (v) => { layer.linetype = v; render(); markDirty(); });
     });
     ltCell.appendChild(ltBtn);
 
@@ -1004,7 +1110,7 @@
       e.stopPropagation();
       openDropdown(pwBtn, PRINT_WIDTHS, layer.printWidth,
         (v) => pwPreviewSVG(v, 44),
-        (v) => { layer.printWidth = v; render(); },
+        (v) => { layer.printWidth = v; render(); markDirty(); },
         "pw");
     });
     pwCell.appendChild(pwBtn);
@@ -1042,6 +1148,7 @@
     selectedId = layer.id;
     editingId = layer.id;
     render();
+    markDirty();
   }
 
   function addChild() {
@@ -1053,6 +1160,7 @@
     selectedId = layer.id;
     editingId = layer.id;
     render();
+    markDirty();
   }
 
   function deleteSelected() {
@@ -1065,6 +1173,7 @@
       const next = siblings[idx] || siblings[idx - 1];
       selectedId = next ? next.id : (hit.parent.id !== "ROOT" ? hit.parent.id : null);
       render();
+      markDirty();
       say("Deleted “" + hit.node.name + "”");
     };
     const kids = countAll(hit.node);
@@ -1089,6 +1198,7 @@
     siblings.splice(idx, 1);
     siblings.splice(to, 0, hit.node);
     render();
+    markDirty();
   }
 
   function indentSelected() {
@@ -1102,6 +1212,7 @@
     newParent.children.push(hit.node);
     newParent.expanded = true;
     render();
+    markDirty();
   }
 
   function outdentSelected() {
@@ -1112,6 +1223,7 @@
     hit.parent.children.splice(hit.parent.children.indexOf(hit.node), 1);
     grandSiblings.splice(grandSiblings.indexOf(hit.parent) + 1, 0, hit.node);
     render();
+    markDirty();
   }
 
   // ---- Drag & drop (Rhino-style reparenting) ----
@@ -1147,6 +1259,7 @@
     }
     selectedId = dragHit.node.id;
     render();
+    markDirty();
   }
 
   // ---- Custom dropdowns with previews ----
@@ -1373,6 +1486,7 @@
     const wasDefault = defaultPresetName === oldName;
     if (wasDefault) defaultPresetName = newName;
     if (selectedPresetName === oldName) selectedPresetName = newName;
+    if (linkedPresetName === oldName) linkedPresetName = newName;
     // Save the new name and promote the default BEFORE deleting the old one, so
     // the server's "clear default on delete" never wipes a still-wanted default.
     await persistPresetOne(newName);
@@ -1407,8 +1521,9 @@
       presets[name] = serializeTree();
       persistPresetOne(name);
       selectedPresetName = name;
+      setLinkedPreset(name); // edits now auto-save to this preset
       renderPresetSelect();
-      say("Saved preset “" + name + "”");
+      saySave("Saved preset “" + name + "”");
     };
     endInlineSave();
     if (presets[name]) {
@@ -1428,6 +1543,7 @@
         hydrateTree(presets[name]);
         editingId = null;
         render();
+        setLinkedPreset(name); // edits now auto-save to this preset
         say("Loaded “" + name + "”");
       }
     );
@@ -1441,6 +1557,7 @@
       removePresetOne(name);
       if (defaultPresetName === name) defaultPresetName = null; // server clears it too
       if (selectedPresetName === name) selectedPresetName = null;
+      if (linkedPresetName === name) setLinkedPreset(null); // stop auto-saving to it
       renderPresetSelect();
       say("Deleted preset “" + name + "”");
     });
@@ -1494,6 +1611,7 @@
     selectedId = roots.length ? roots[0].id : null;
     editingId = null;
     render();
+    setLinkedPreset(null); // imported data is scratch until you Save As a preset
     say("Imported " + src.length + " layers from Rhino" +
       (unknownLt ? " (" + unknownLt + " custom linetype" + (unknownLt === 1 ? "" : "s") + " set to Continuous)" : ""));
   }
@@ -1609,6 +1727,7 @@
   document.getElementById("savePresetBtn").addEventListener("click", beginInlineSave);
   document.getElementById("loadPresetBtn").addEventListener("click", loadPreset);
   document.getElementById("deletePresetBtn").addEventListener("click", deletePreset);
+  autosaveToggle.addEventListener("change", toggleAutosave);
   presetTrigger.addEventListener("click", (e) => { e.stopPropagation(); openPresetMenu(); });
   presetTrigger.addEventListener("keydown", (e) => {
     if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") { e.preventDefault(); openPresetMenu(); }
@@ -1640,6 +1759,7 @@
       root.children.push(hit.node);
       selectedId = hit.node.id;
       render();
+      markDirty();
     }
     dragId = null;
   });
@@ -1758,6 +1878,7 @@
   // ---- Init ----
   applyCols();
   render();
+  updateAutosaveToggle();
   (async function init() {
     await loadPresets();        // populates presets, sets apiMode, renders the select
     await loadDefaultPreset();  // reads the shared startup default
@@ -1766,6 +1887,7 @@
       editingId = null;
       render();
       selectedPresetName = defaultPresetName;
+      setLinkedPreset(defaultPresetName); // edits auto-save back to the default
       say("Loaded default preset “" + defaultPresetName + "”");
     }
     renderPresetSelect();       // reflect the ★ marker + current selection in the trigger
