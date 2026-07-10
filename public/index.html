@@ -1010,6 +1010,10 @@
     const twisty = document.createElement("span");
     twisty.className = "twisty" + (layer.children.length ? (layer.expanded ? " open" : "") : " leaf");
     twisty.innerHTML = '<svg viewBox="0 0 16 16" width="10" height="10" fill="currentColor"><path d="M5 3l6 5-6 5z"/></svg>';
+    // Stop mousedown from bubbling to the row's select handler — otherwise the
+    // row re-renders and replaces this element mid-click, so expand/collapse
+    // only takes effect on the second click when the layer isn't selected yet.
+    twisty.addEventListener("mousedown", (e) => e.stopPropagation());
     twisty.addEventListener("click", (e) => {
       e.stopPropagation();
       layer.expanded = !layer.expanded;
