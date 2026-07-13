@@ -1668,7 +1668,7 @@
       PlotWeight: pw
     });
   }
-  function exportRhino() {
+  async function exportRhino() {
     const out = [];
     (function walk(node, parentGuid) {
       for (const c of node.children) {
@@ -1677,14 +1677,37 @@
       }
     })(root, null);
     if (!out.length) { say("No layers to export"); return; }
-    const blob = new Blob([JSON.stringify({ Layers: out }, null, 2)], { type: "application/json" });
+    const json = JSON.stringify({ Layers: out }, null, 2);
+    const base = (linkedPresetName || selectedPresetName || "Layer_Export").replace(/[^\w.-]+/g, "_");
+    const filename = base + ".json";
+
+    // Preferred: native OS "Save As" dialog (Chrome/Edge on Windows).
+    if (window.showSaveFilePicker) {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: filename,
+          types: [{ description: "Rhino Layer Export", accept: { "application/json": [".json"] } }]
+        });
+        const w = await handle.createWritable();
+        await w.write(json);
+        await w.close();
+        say("Exported " + out.length + " layers to " + handle.name);
+        return;
+      } catch (e) {
+        if (e && e.name === "AbortError") { say("Export canceled"); return; } // user closed the dialog
+        // any other failure → fall through to the download fallback below
+      }
+    }
+
+    // Fallback: anchor download (goes to the browser's download folder).
+    const blob = new Blob([json], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
-    a.download = "Layer_Export.json";
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     a.remove();
-    URL.revokeObjectURL(a.href);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1500); // revoke AFTER the download starts
     say("Exported " + out.length + " layers in Rhino format");
   }
 
@@ -1700,11 +1723,27 @@
       }
       if (Array.isArray(data)) data = { Layers: data }; // tolerate a bare layer array
       if (isRhinoExport(data)) {
-        askConfirm(
-          "Import Rhino layer export?",
-          "Found " + data.Layers.length + " layers. Importing replaces the current layer table — save it as a preset first if you want to keep it.",
-          () => importRhinoLayers(data)
-        );
+        // Name the preset after the file (minus extension); import loads the
+        // layers AND saves them as a preset so they land in the library.
+        const base = file.name.replace(/\.[^.]+$/, "").trim() || "Imported Layers";
+        const doImport = () => {
+          importRhinoLayers(data);            // load the layers into the table
+          presets[base] = serializeTree();    // capture them as a preset
+          selectedPresetName = base;
+          setLinkedPreset(base);              // link so auto-save can target it
+          persistPresetOne(base);             // persist to the server
+          renderPresetSelect();
+          saySave("Saved as preset “" + base + "”");
+        };
+        if (presets[base]) {
+          askConfirm(
+            "Overwrite preset?",
+            "A preset named “" + base + "” already exists. Importing replaces it.",
+            doImport
+          );
+        } else {
+          doImport();
+        }
         return;
       }
       const incoming = data && data.presets && typeof data.presets === "object" ? data.presets : null;
