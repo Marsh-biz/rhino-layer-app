@@ -5,6 +5,7 @@ const path = require("path");
 
 const app = express();
 app.use(express.json({ limit: "5mb" }));
+app.use(express.urlencoded({ extended: false, limit: "8mb" })); // for the form-based export
 
 // ---------- Storage backend ----------
 // Uses Railway Postgres when DATABASE_URL is present; otherwise an in-memory
@@ -156,6 +157,19 @@ app.put("/api/default-preset", async (req, res) => {
     console.error(e);
     res.status(500).json({ error: "failed to set default preset" });
   }
+});
+
+// Echo posted JSON back as a file download. Lets the app export a file from
+// inside a sandboxed iframe (e.g. Notion) by POSTing a form to a new top-level
+// tab — where the browser's download is not blocked by the embed sandbox.
+app.post("/api/export", (req, res) => {
+  const raw = req.body && req.body.json;
+  if (!raw || typeof raw !== "string") return res.status(400).send("missing json");
+  let name = String((req.body && req.body.filename) || "Layer_Export.json").replace(/[^\w.\-]+/g, "_");
+  if (!/\.json$/i.test(name)) name += ".json";
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.setHeader("Content-Disposition", `attachment; filename="${name}"`);
+  res.send(raw);
 });
 
 app.get("/healthz", (_req, res) => res.json({ ok: true, db: !!db }));

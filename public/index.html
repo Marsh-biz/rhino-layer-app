@@ -1681,6 +1681,26 @@
     const base = (linkedPresetName || selectedPresetName || "Layer_Export").replace(/[^\w.-]+/g, "_");
     const filename = base + ".json";
 
+    // Embedded (e.g. Notion iframe): the file picker and in-frame downloads are
+    // blocked by the sandbox. POST to the server and let it download in a new
+    // top-level tab, which the sandbox does not block.
+    let embedded = false;
+    try { embedded = window.self !== window.top; } catch (e) { embedded = true; }
+    if (embedded) {
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "api/export";
+      form.target = "_blank";
+      const add = (n, v) => { const i = document.createElement("input"); i.type = "hidden"; i.name = n; i.value = v; form.appendChild(i); };
+      add("filename", filename);
+      add("json", json);
+      document.body.appendChild(form);
+      form.submit();
+      form.remove();
+      say("Exported " + out.length + " layers (opened in a new tab)");
+      return;
+    }
+
     // Preferred: native OS "Save As" dialog (Chrome/Edge on Windows).
     if (window.showSaveFilePicker) {
       try {
