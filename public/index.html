@@ -1682,22 +1682,29 @@
     const filename = base + ".json";
 
     // Embedded (e.g. Notion iframe): the file picker and in-frame downloads are
-    // blocked by the sandbox. POST to the server and let it download in a new
-    // top-level tab, which the sandbox does not block.
+    // blocked by the sandbox. Open a blank top-level tab (preserves the click's
+    // popup permission), POST the data to get a one-time token, then point the
+    // tab at the GET download URL — the download runs outside the sandbox.
     let embedded = false;
     try { embedded = window.self !== window.top; } catch (e) { embedded = true; }
     if (embedded) {
-      const form = document.createElement("form");
-      form.method = "POST";
-      form.action = "api/export";
-      form.target = "_blank";
-      const add = (n, v) => { const i = document.createElement("input"); i.type = "hidden"; i.name = n; i.value = v; form.appendChild(i); };
-      add("filename", filename);
-      add("json", json);
-      document.body.appendChild(form);
-      form.submit();
-      form.remove();
-      say("Exported " + out.length + " layers (opened in a new tab)");
+      const win = window.open("", "_blank"); // must happen synchronously in the click
+      try {
+        const r = await fetch("api/export", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ filename, json })
+        });
+        if (!r.ok) throw new Error("server " + r.status);
+        const { token } = await r.json();
+        const url = "api/export/" + token;
+        if (win && !win.closed) win.location.href = url;
+        else window.open(url, "_blank"); // popup was blocked → try again
+        say("Exported " + out.length + " layers (new tab)");
+      } catch (e) {
+        if (win && !win.closed) win.close();
+        say("Export failed — open the app in a full browser tab and retry", 6000);
+      }
       return;
     }
 

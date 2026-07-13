@@ -2,6 +2,7 @@
 
 const express = require("express");
 const path = require("path");
+const crypto = require("node:crypto");
 
 const app = express();
 app.use(express.json({ limit: "5mb" }));
@@ -159,17 +160,32 @@ app.put("/api/default-preset", async (req, res) => {
   }
 });
 
-// Echo posted JSON back as a file download. Lets the app export a file from
-// inside a sandboxed iframe (e.g. Notion) by POSTing a form to a new top-level
-// tab — where the browser's download is not blocked by the embed sandbox.
+// Two-step file export so it works from inside a sandboxed iframe (e.g. Notion),
+// where the file picker and in-frame downloads are blocked:
+//   1) client POSTs the JSON (a normal same-origin fetch) -> we stash it, return a token
+//   2) client window.open()s GET /api/export/:token in a new top-level tab -> real download
+const exportStash = new Map(); // token -> { filename, json, t }
+function pruneStash() {
+  const now = Date.now();
+  for (const [k, v] of exportStash) if (now - v.t > 5 * 60 * 1000) exportStash.delete(k);
+}
 app.post("/api/export", (req, res) => {
-  const raw = req.body && req.body.json;
-  if (!raw || typeof raw !== "string") return res.status(400).send("missing json");
-  let name = String((req.body && req.body.filename) || "Layer_Export.json").replace(/[^\w.\-]+/g, "_");
-  if (!/\.json$/i.test(name)) name += ".json";
+  const json = req.body && req.body.json;
+  if (!json || typeof json !== "string") return res.status(400).json({ error: "missing json" });
+  let filename = String((req.body && req.body.filename) || "Layer_Export.json").replace(/[^\w.\-]+/g, "_");
+  if (!/\.json$/i.test(filename)) filename += ".json";
+  pruneStash();
+  const token = crypto.randomUUID();
+  exportStash.set(token, { filename, json, t: Date.now() });
+  res.json({ token });
+});
+app.get("/api/export/:token", (req, res) => {
+  const item = exportStash.get(req.params.token);
+  if (!item) return res.status(404).send("export link expired — please export again");
+  exportStash.delete(req.params.token); // one-time use
   res.setHeader("Content-Type", "application/json; charset=utf-8");
-  res.setHeader("Content-Disposition", `attachment; filename="${name}"`);
-  res.send(raw);
+  res.setHeader("Content-Disposition", `attachment; filename="${item.filename}"`);
+  res.send(item.json);
 });
 
 app.get("/healthz", (_req, res) => res.json({ ok: true, db: !!db }));
