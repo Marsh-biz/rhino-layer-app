@@ -946,21 +946,29 @@
   // can show that layer's expected object types. Same-origin BroadcastChannel
   // spans the Notion iframe + a popped Railway tab; localStorage is the fallback.
   const objChannel = ("BroadcastChannel" in window) ? new BroadcastChannel("sc-objects") : null;
-  let lastBroadcastLayer = " ";
-  function broadcastSelection() {
-    const hit = selectedId ? find(selectedId) : null;
-    const name = hit ? hit.node.name : null;
+  const NO_BROADCAST = {}; // sentinel: never equals a real layer name or null
+  let lastBroadcastLayer = NO_BROADCAST;
+  // Push a specific layer name to the companion window (deduped). Pass null to clear.
+  function broadcastLayer(name) {
     if (name === lastBroadcastLayer) return;
     lastBroadcastLayer = name;
     try { localStorage.setItem("sc-selected-layer", name == null ? "" : name); } catch (e) {}
     if (objChannel) objChannel.postMessage({ type: "select", layer: name });
   }
+  function selectedLayerName() {
+    const hit = selectedId ? find(selectedId) : null;
+    return hit ? hit.node.name : null;
+  }
+  // Resting state (no row hovered) shows the selected layer's object types.
+  function broadcastSelection() { broadcastLayer(selectedLayerName()); }
   if (objChannel) {
     objChannel.onmessage = (e) => {
       // the companion window just opened and asked for the current selection
-      if (e && e.data && e.data.type === "hello") { lastBroadcastLayer = " "; broadcastSelection(); }
+      if (e && e.data && e.data.type === "hello") { lastBroadcastLayer = NO_BROADCAST; broadcastSelection(); }
     };
   }
+  // Leaving the layer table returns the companion to the selected layer.
+  rowsEl.addEventListener("mouseleave", broadcastSelection);
   document.getElementById("objectsBtn").addEventListener("click", () => {
     window.open("objects.html", "sc-objects-window", "width=480,height=760");
   });
@@ -1150,6 +1158,7 @@
     row.appendChild(ltCell);
     row.appendChild(pwCell);
 
+    row.addEventListener("mouseenter", () => broadcastLayer(layer.name));
     row.addEventListener("mousedown", () => {
       if (selectedId !== layer.id) {
         selectedId = layer.id;
