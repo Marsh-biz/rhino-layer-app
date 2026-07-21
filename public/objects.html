@@ -219,6 +219,7 @@
   <button id="add" hidden>+ Add object type for this layer</button>
   <div class="status" id="status">Waiting for the layer emulator…</div>
 
+<script src="layer-humanize.js"></script>
 <script>
 (function () {
   "use strict";
@@ -242,6 +243,12 @@
   function escapeHtml(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, c =>
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+  // The layer emulator stores {name, isLeaf} as JSON; tolerate a legacy plain name.
+  function parseSelection(raw) {
+    if (!raw) return { name: null, isLeaf: true };
+    try { const o = JSON.parse(raw); if (o && typeof o === "object") return { name: o.name || null, isLeaf: o.isLeaf !== false }; } catch (e) {}
+    return { name: raw, isLeaf: true };
   }
   function restingStatus() {
     return currentLayer ? ("Layer: " + currentLayer) : "Waiting for the layer emulator…";
@@ -378,9 +385,13 @@
   }
   addBtn.addEventListener("click", () => {
     if (!currentLayer || !currentIsLeaf) return;
+    // Pre-fill name + category by reading the acronym glossary off the layer name.
+    const H = window.LayerHumanize || {};
+    const guessedName = (H.humanizeLayer && H.humanizeLayer(currentLayer)) || "New object type";
+    const guessedCat = (H.guessCategory && H.guessCategory(currentLayer)) || "Other";
     const t = {
       id: (crypto.randomUUID ? crypto.randomUUID() : "ot_" + Date.now()),
-      name: "New object type", category: "Other", description: "",
+      name: guessedName, category: guessedCat, description: "",
       home_layer: currentLayer, branch_key: "", is_primary: false
     };
     save(t).then(load);
@@ -397,7 +408,7 @@
     channel.postMessage({ type: "hello" }); // ask the emulator for its current selection + theme
   }
   window.addEventListener("storage", (e) => {
-    if (e.key === "sc-selected-layer") setLayer(e.newValue || null);
+    if (e.key === "sc-selected-layer") { const s = parseSelection(e.newValue); setLayer(s.name, s.isLeaf); }
     else if (e.key === SHARED_THEME_KEY) setTheme(e.newValue !== "dark", false);
   });
 
@@ -410,7 +421,7 @@
     } catch (e) {}
     setTheme(isLight, false);
   })();
-  try { const init = localStorage.getItem("sc-selected-layer"); if (init) setLayer(init); } catch (e) {}
+  try { const s = parseSelection(localStorage.getItem("sc-selected-layer")); if (s.name) setLayer(s.name, s.isLeaf); } catch (e) {}
   if (!currentLayer) setLayer(null);
 })();
 </script>

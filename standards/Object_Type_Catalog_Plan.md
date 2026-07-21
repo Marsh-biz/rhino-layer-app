@@ -72,17 +72,22 @@ A layer's expected types = all rows where `home_layer` = that layer (primary fir
 - `POST /api/object-types/import` → bulk seed
 - Table created on boot via `CREATE TABLE IF NOT EXISTS` (no migration).
 
-## Build status (Phases 1–3 done — 2026-07-21)
+## Build status (Phases 1–3 done and deployed — 2026-07-21)
 - **Phase 1 ✓** — `object_types` table + CRUD/import API in `server.js`; `scripts/seed_object_types.js`
-  derives one type per `SC-OBJECTS` leaf from the live standards (64 seeded in local test).
+  derives one type per `SC-OBJECTS` leaf from the live standards (64 seeded).
 - **Phase 2 ✓** — `index.html` broadcasts the selected layer on `BroadcastChannel("sc-objects")`
   (+ localStorage fallback); "⧉ Object types" button opens the companion window.
 - **Phase 3 ✓** — `public/objects.html` companion window: syncs to the selected layer, lists its
   expected types (primary first), and does inline add/edit/delete (name, category, branch_key, notes, primary).
 - **Phase 4** — not started (future model-health).
-- **To deploy:** push `server.js` + `public/index.html` + `public/objects.html` to Railway, then run
-  `node standards/scripts/seed_object_types.js https://layers-structurecraft.up.railway.app` once to
-  seed the catalog into the live DB. (`branch_key` stays blank until verified against a real Branch model.)
+- **Deployed ✓** — repo pushed to `github.com/Marsh-biz/rhino-layer-app` (grafted onto the real
+  project history — the working copy had no local `.git` even though it was already live). Railway
+  is connected to this repo for auto-deploy on push to `main`; the push auto-deployed within
+  seconds and the catalog was seeded live via
+  `node standards/scripts/seed_object_types.js https://layers-structurecraft.up.railway.app`
+  (64 types imported, verified via `/api/object-types`). Added `railway.json` (Nixpacks build,
+  `/healthz` healthcheck) and gitignored local `.claude/` settings.
+  `branch_key` stays blank until verified against a real Branch model (see §3).
 
 ## 6. Build phases
 **Phase 1 — Catalog data + API + seed**

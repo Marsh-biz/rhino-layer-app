@@ -955,7 +955,10 @@
     if (name === lastBroadcastLayer) return;
     lastBroadcastLayer = name;
     const isLeaf = !!(node && (!node.children || node.children.length === 0));
-    try { localStorage.setItem("sc-selected-layer", name == null ? "" : name); } catch (e) {}
+    // Store name + isLeaf together so the storage-event fallback (used when a
+    // window can't get the BroadcastChannel message) carries leaf-ness too and
+    // doesn't clobber the parent/leaf state a beat later.
+    try { localStorage.setItem("sc-selected-layer", JSON.stringify({ name: name, isLeaf: isLeaf })); } catch (e) {}
     if (objChannel) objChannel.postMessage({ type: "select", layer: name, isLeaf: isLeaf });
   }
   function selectedNode() {
