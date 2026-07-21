@@ -626,6 +626,7 @@
     <button class="tool" id="outdentBtn" data-tip="Promote one level">
       <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 3.5h11M8.5 8h5M8.5 12.5h5"/><path d="M6 8.2 3.4 10.3 6 12.4" fill="currentColor" stroke="none"/><path d="M3.5 8v4.5"/></svg>
     </button>
+    <button class="btn" id="objectsBtn" title="Open the object-type panel (syncs with the selected layer)" style="margin-left:auto">⧉ Object types</button>
   </div>
 
   <div class="grid-head" id="gridHead">
@@ -940,6 +941,30 @@
     confirmCb = null;
   });
 
+  // ---- Object-type companion sync ----
+  // Broadcasts the currently selected layer's name so the /objects.html window
+  // can show that layer's expected object types. Same-origin BroadcastChannel
+  // spans the Notion iframe + a popped Railway tab; localStorage is the fallback.
+  const objChannel = ("BroadcastChannel" in window) ? new BroadcastChannel("sc-objects") : null;
+  let lastBroadcastLayer = " ";
+  function broadcastSelection() {
+    const hit = selectedId ? find(selectedId) : null;
+    const name = hit ? hit.node.name : null;
+    if (name === lastBroadcastLayer) return;
+    lastBroadcastLayer = name;
+    try { localStorage.setItem("sc-selected-layer", name == null ? "" : name); } catch (e) {}
+    if (objChannel) objChannel.postMessage({ type: "select", layer: name });
+  }
+  if (objChannel) {
+    objChannel.onmessage = (e) => {
+      // the companion window just opened and asked for the current selection
+      if (e && e.data && e.data.type === "hello") { lastBroadcastLayer = " "; broadcastSelection(); }
+    };
+  }
+  document.getElementById("objectsBtn").addEventListener("click", () => {
+    window.open("objects.html", "sc-objects-window", "width=480,height=760");
+  });
+
   // ---- Rendering ----
   function render() {
     rowsEl.innerHTML = "";
@@ -956,6 +981,7 @@
     const total = countAll(root);
     countInfo.textContent = total + " layer" + (total === 1 ? "" : "s");
     if (typeof positionResizers === "function") positionResizers();
+    broadcastSelection();
   }
 
   function renderRow(layer, depth) {

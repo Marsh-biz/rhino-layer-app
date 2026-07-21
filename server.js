@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: false, limit: "8mb" })); // for the form-
 let db = null;
 const memory = new Map();
 const settingsMemory = new Map();
+const objectTypesMemory = new Map(); // id -> object-type row (in-memory fallback)
 
 async function initDb() {
   if (!process.env.DATABASE_URL) {
@@ -35,7 +36,20 @@ async function initDb() {
       value TEXT
     )
   `);
-  console.log("Postgres connected; presets + settings tables ready.");
+  await db.query(`
+    CREATE TABLE IF NOT EXISTS object_types (
+      id          TEXT PRIMARY KEY,
+      name        TEXT NOT NULL,
+      category    TEXT,
+      description TEXT,
+      home_layer  TEXT,
+      branch_key  TEXT,
+      is_primary  BOOLEAN NOT NULL DEFAULT false,
+      updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+    )
+  `);
+  await db.query("CREATE INDEX IF NOT EXISTS object_types_home_layer_idx ON object_types (home_layer)");
+  console.log("Postgres connected; presets + settings + object_types tables ready.");
 }
 
 // ---------- App-wide settings (shared across all users) ----------
@@ -93,6 +107,58 @@ async function deletePreset(name) {
     return;
   }
   memory.delete(name);
+}
+
+// ---------- Object-type catalog (global type↔layer map, independent of presets) ----------
+function sortTypes(rows) {
+  return rows.sort((a, b) =>
+    (a.home_layer || "").localeCompare(b.home_layer || "") ||
+    (b.is_primary ? 1 : 0) - (a.is_primary ? 1 : 0) ||
+    (a.name || "").localeCompare(b.name || ""));
+}
+async function listObjectTypes(homeLayer) {
+  if (db) {
+    const r = homeLayer
+      ? await db.query("SELECT * FROM object_types WHERE home_layer = $1 ORDER BY is_primary DESC, name", [homeLayer])
+      : await db.query("SELECT * FROM object_types ORDER BY home_layer, is_primary DESC, name");
+    return r.rows;
+  }
+  let rows = [...objectTypesMemory.values()];
+  if (homeLayer) rows = rows.filter(t => t.home_layer === homeLayer);
+  return sortTypes(rows);
+}
+async function upsertObjectType(row) {
+  const t = {
+    id: (row.id && String(row.id)) || crypto.randomUUID(),
+    name: String(row.name || "").trim(),
+    category: row.category ? String(row.category) : null,
+    description: row.description ? String(row.description) : null,
+    home_layer: row.home_layer ? String(row.home_layer) : null,
+    branch_key: row.branch_key ? String(row.branch_key) : null,
+    is_primary: !!row.is_primary,
+  };
+  if (db) {
+    await db.query(
+      `INSERT INTO object_types (id, name, category, description, home_layer, branch_key, is_primary, updated_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7, now())
+       ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, category=EXCLUDED.category,
+         description=EXCLUDED.description, home_layer=EXCLUDED.home_layer,
+         branch_key=EXCLUDED.branch_key, is_primary=EXCLUDED.is_primary, updated_at=now()`,
+      [t.id, t.name, t.category, t.description, t.home_layer, t.branch_key, t.is_primary]
+    );
+    return t;
+  }
+  const stored = { ...t, updated_at: new Date().toISOString() };
+  objectTypesMemory.set(t.id, stored);
+  return stored;
+}
+async function deleteObjectType(id) {
+  if (db) { await db.query("DELETE FROM object_types WHERE id = $1", [id]); return; }
+  objectTypesMemory.delete(id);
+}
+async function clearObjectTypes() {
+  if (db) { await db.query("DELETE FROM object_types"); return; }
+  objectTypesMemory.clear();
 }
 
 // ---------- API ----------
@@ -157,6 +223,55 @@ app.put("/api/default-preset", async (req, res) => {
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: "failed to set default preset" });
+  }
+});
+
+// ---------- Object-type catalog API ----------
+app.get("/api/object-types", async (req, res) => {
+  try {
+    const homeLayer = req.query.home_layer ? String(req.query.home_layer) : null;
+    res.json({ types: await listObjectTypes(homeLayer) });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "failed to list object types" });
+  }
+});
+
+app.put("/api/object-types/:id", async (req, res) => {
+  const id = String(req.params.id || "").trim();
+  const b = req.body || {};
+  if (!id) return res.status(400).json({ error: "missing id" });
+  if (!b.name || !String(b.name).trim()) return res.status(400).json({ error: "name is required" });
+  try {
+    const type = await upsertObjectType({ ...b, id });
+    res.json({ ok: true, type });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "failed to save object type" });
+  }
+});
+
+app.delete("/api/object-types/:id", async (req, res) => {
+  try {
+    await deleteObjectType(String(req.params.id || ""));
+    res.json({ ok: true });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "failed to delete object type" });
+  }
+});
+
+app.post("/api/object-types/import", async (req, res) => {
+  const types = req.body && Array.isArray(req.body.types) ? req.body.types : null;
+  if (!types) return res.status(400).json({ error: "body must be { types: [...] }" });
+  try {
+    if (req.body.replace) await clearObjectTypes();
+    let n = 0;
+    for (const t of types) { if (t && t.name) { await upsertObjectType(t); n++; } }
+    res.json({ ok: true, imported: n });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "failed to import object types" });
   }
 });
 

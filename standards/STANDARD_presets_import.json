@@ -1,0 +1,4080 @@
+{
+  "presets": {
+    "SC_STANDARD_BLDG": [
+      {
+        "guid": null,
+        "name": "SC-OBJECTS",
+        "color": "#000000",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "GLM",
+            "color": "#F3BA5C",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "SC_GLM_BEAM",
+                "color": "#F3BA5C",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_GLM_BILLET",
+                "color": "#F3BA5C",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_GLM_FAST",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_GLM_TOOL_CHASE",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_GLM_TOOL_DAP",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_GLM_TOOL_PEN",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_GLM_TRUSS_BOTCHORD",
+                "color": "#F3BA5C",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_GLM_TRUSS_TOPCHORD",
+                "color": "#F3BA5C",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_GLM_TRUSS_WEB",
+                "color": "#F3BA5C",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "CLT",
+            "color": "#FFD072",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "SC_CLT_PANEL",
+                "color": "#FFD072",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_CLT_TOOL_DAP",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_CLT_TOOL_OPENING",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_CLT_TOOL_PEN",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_CLT_WALL",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "DLT",
+            "color": "#FFD072",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "SC_DLT_FAST",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_DLT_PANEL",
+                "color": "#FFD072",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_DLT_STEEL_STRONG_BACK",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_DLT_TOOL_DAP",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_DLT_TOOL_OPENING",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_DLT_TOOL_PEN",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_DLT_WALL",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "STL",
+            "color": "#696969",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "SC_STL_ANGLE",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_STL_BEAM",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_STL_PLATE_BASE",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_STL_PLATE_BENT",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_STL_PLATE_HANGER",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_STL_PLATE_KNIFE",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_STL_PLATE_Z",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_STL_POST",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_STL_ROD",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_STL_TRUSS_BOTCHORD",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_STL_TRUSS_TOPCHORD",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_STL_TRUSS_WEB",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "BLK",
+            "color": "#000000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "SC_BLK_CONN_BEARING",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_BLK_CONN_HANGER",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_BLK_FAST",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_BLK_TOOL_CUTTING",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_BLK_TOOL_DAP",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_BLK_TOOL_PRE_DRILL",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          }
+        ],
+        "expanded": true,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      },
+      {
+        "guid": null,
+        "name": "SC-GRIDLINES",
+        "color": "#000000",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "GL-PLAN",
+            "color": "#ff00ff",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "GL-NS",
+            "color": "#ff00ff",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "GL-EW",
+            "color": "#ff00ff",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "EL-NS",
+            "color": "#be00ff",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "EL-EW",
+            "color": "#be00ff",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          }
+        ],
+        "expanded": false,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      },
+      {
+        "guid": null,
+        "name": "LIBRARY",
+        "color": "#000000",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "CE_LB",
+            "color": "#000000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "CE_STEEL",
+                "color": "#000000",
+                "rhino": null,
+                "children": [
+                  {
+                    "guid": null,
+                    "name": "CE_STEEL_EU",
+                    "color": "#0080FF",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "CE_STEEL_NA_SITE",
+                    "color": "#00D084",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "CE_STEEL_NA_SHOP",
+                    "color": "#004080",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  }
+                ],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_FASTENER",
+                "color": "#000000",
+                "rhino": null,
+                "children": [
+                  {
+                    "guid": null,
+                    "name": "CE_FASTENER_EU",
+                    "color": "#80FFFF",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "CE_FASTENER_NA_SITE",
+                    "color": "#80FF80",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  }
+                ],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_EMBED_NA",
+                "color": "#C0C0C0",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_RUBBER_NA",
+                "color": "#9C27B0",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_SHIM_NA",
+                "color": "#FFFF80",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_DAP",
+                "color": "#000000",
+                "rhino": null,
+                "children": [
+                  {
+                    "guid": null,
+                    "name": "DAP",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_CUT",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_DRILL",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_PLANE",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_PANEL",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_GLM",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_DLT",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_STEEL",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  }
+                ],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_PLUG",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_PREFAB",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_NUT_WASHER",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_BRACE",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_LEDGER",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_BLOCK",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_ROD",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_COVER",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_LAM",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_ASSEMBLY",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          }
+        ],
+        "expanded": true,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      },
+      {
+        "guid": null,
+        "name": "REF",
+        "color": "#000000",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "S-REVIT MODEL",
+            "color": "#000000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "S-FNDN",
+                "color": "#cc6600",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "S-COLS",
+                "color": "#cccc00",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "S-BEAM",
+                "color": "#cc0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "A-WALL",
+                "color": "#66cc99",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "A-ROOF",
+                "color": "#00cccc",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "A-GENM",
+                "color": "#cc6666",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "A-FLOR-OTLN",
+                "color": "#ffff7f",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "A-FLOR",
+                "color": "#6600cc",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              }
+            ],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "S-GRID",
+            "color": "#ff0000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "GRID LINES",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Center",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "GRID BUBBLES",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.15"
+              },
+              {
+                "guid": null,
+                "name": "DIM",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "A-FLOR-LEVL",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Center",
+                "printWidth": "0.15"
+              },
+              {
+                "guid": null,
+                "name": "S-GRID-IDEN",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.15"
+              },
+              {
+                "guid": null,
+                "name": "S-GRID",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.15"
+              }
+            ],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "0.15"
+          },
+          {
+            "guid": null,
+            "name": "S-CONCRETE",
+            "color": "#000000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "S-FNDN",
+                "color": "#cc6600",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "S-COLS",
+                "color": "#cccc00",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "S-BEAM",
+                "color": "#cc0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "A-WALL",
+                "color": "#66cc99",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "A-FLOR-OTLN",
+                "color": "#ffff7f",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "A-FLOR",
+                "color": "#6600cc",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              }
+            ],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "S-CENTERLINES",
+            "color": "#000000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "SC - Floor Surfaces",
+                "color": "#bebebe",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "Clearance Requirements",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "DashDot",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "100% DD Centerlines",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "ARCH-ELEVATION+PLAN VIEW",
+            "color": "#ff0000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "WEST",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SOUTH",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "PLAN VIEW",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "NORTH",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "INT ELEV",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "EAST",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "0",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "0.15"
+          },
+          {
+            "guid": null,
+            "name": "S-WALLS",
+            "color": "#000000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "A-WALL",
+                "color": "#66cc99",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "S-BEAM",
+                "color": "#cc0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "A-ROOF",
+                "color": "#00cccc",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "A-FLOR",
+                "color": "#6600cc",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              },
+              {
+                "guid": null,
+                "name": "S-COLS",
+                "color": "#cccc00",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.35"
+              }
+            ],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "ROOF PANELS",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          }
+        ],
+        "expanded": false,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      },
+      {
+        "guid": null,
+        "name": "SC-LAYOUT",
+        "color": "#000000",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "SC-TEXT",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.25"
+          },
+          {
+            "guid": null,
+            "name": "SC-TBLOCK",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.18"
+          },
+          {
+            "guid": null,
+            "name": "SC-SYMBOL",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.20"
+          },
+          {
+            "guid": null,
+            "name": "SC-MAKE 2D VISIBLE LINES",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.30"
+          },
+          {
+            "guid": null,
+            "name": "SC-MAKE 2D HIDEN LINES",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.13"
+          },
+          {
+            "guid": null,
+            "name": "SC-Logo",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "SC-Lines",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "SC-DRAFT",
+            "color": "#bf0000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "SC-DIM",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.15"
+          },
+          {
+            "guid": null,
+            "name": "SC-BOUNDARY",
+            "color": "#a87474",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "No Print"
+          },
+          {
+            "guid": null,
+            "name": "SC-CENTER-LINES",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "DashDot",
+            "printWidth": "0.13"
+          }
+        ],
+        "expanded": false,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      },
+      {
+        "guid": null,
+        "name": "BR_LAYERSTACK",
+        "color": "#000000",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "USER",
+            "color": "#000000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "SC_ANN_DIM",
+                "color": "#006bd6",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_CENTER",
+                "color": "#4f4f4f",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Hidden",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_LIFTPOINTS",
+                "color": "#0000ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_TEXT",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_OUTLINE",
+                "color": "#00982d",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.18"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_PROFILE",
+                "color": "#007fff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_HIDD_A",
+                "color": "#651090",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_HIDD_B",
+                "color": "#9d53c0",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_HIDD_C",
+                "color": "#daabf2",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_HIDD_D",
+                "color": "#daabf2",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_HATCH_A",
+                "color": "#006c8d",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_HATCH_B",
+                "color": "#00b6b6",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_HATCH_C",
+                "color": "#96cdde",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_FAST",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_ACOUSTIC",
+                "color": "#ff00fa",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_MEMBRANE",
+                "color": "#f9a700",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_INFILLPARALLEL",
+                "color": "#00ff00",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Dots",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_INFILLPERP",
+                "color": "#9400ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Dots",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_STRONGBACK",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_RED",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.20"
+              },
+              {
+                "guid": null,
+                "name": "SC_TEMPORARY",
+                "color": "#0000ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_BLUE",
+                "color": "#0000ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LEAD",
+                "color": "#3278b4",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "AUTO",
+            "color": "#ff0000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "BR_ANN_DIM",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LEAD",
+                "color": "#3278b4",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_ELEM_LIFTPOINTS",
+                "color": "#0000ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_TEXT",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_OUTLINE",
+                "color": "#00982d",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.18"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_PROFILE",
+                "color": "#007fff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_HIDD_A",
+                "color": "#651090",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_HIDD_B",
+                "color": "#9d53c0",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_HIDD_C",
+                "color": "#daabf2",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_HIDD_D",
+                "color": "#daabf2",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_STITCH",
+                "color": "#ff00ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_HATCH_A",
+                "color": "#006c8d",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_HATCH_B",
+                "color": "#00b6b6",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_HATCH_C",
+                "color": "#96cdde",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_VIEWS",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "No Print"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_ELEM_SHEATH",
+                "color": "#ffffff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_ELEM_FAST",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              }
+            ],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          }
+        ],
+        "expanded": true,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      }
+    ],
+    "SC_STANDARD_BRIDGE": [
+      {
+        "guid": null,
+        "name": "CE_BRIDGE_SEGMENTS",
+        "color": "#ba7f41",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "DAPS",
+            "color": "#bebebe",
+            "rhino": null,
+            "children": [],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "DECK",
+            "color": "#ba7f41",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "FLASHING",
+            "color": "#ceff7f",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "FLASHING_PLYWOOD",
+            "color": "#d2691e",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "GLM",
+            "color": "#f3ba5c",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "GUARDRAIL",
+            "color": "#ba7f41",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "POST",
+            "color": "#ba7f41",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "SILL_PLATE",
+            "color": "#ba7f41",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "STEEL",
+            "color": "#0052d0",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "STEEL_EXISTING",
+            "color": "#bebebe",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          }
+        ],
+        "expanded": false,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      },
+      {
+        "guid": null,
+        "name": "CE_CONNECTIONS",
+        "color": "#0064bf",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "DAPS",
+            "color": "#e6e6e6",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "STEEL_INSIDE_CE",
+                "color": "#e6e6e6",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "STEEL_OUTSIDE_CE",
+                "color": "#e6e6e6",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "TIMBER_OUTSIDE_CE",
+                "color": "#e6e6e6",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "FASTENERS",
+            "color": "#000000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "SHOP",
+                "color": "#00ff00",
+                "rhino": null,
+                "children": [
+                  {
+                    "guid": null,
+                    "name": "NEOPRENE_WASHER",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "NUT",
+                    "color": "#ffff00",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "ROD",
+                    "color": "#ff0000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "SCREW",
+                    "color": "#ff0000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "WASHER",
+                    "color": "#007f00",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  }
+                ],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SITE",
+                "color": "#00ffff",
+                "rhino": null,
+                "children": [
+                  {
+                    "guid": null,
+                    "name": "ANCHOR_ROD",
+                    "color": "#ff7f00",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "BOLT",
+                    "color": "#ff0000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "CARRIAGE_BOLT",
+                    "color": "#ff0000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "NEOPRENE_RUBBER_WASHERS",
+                    "color": "#3fbf7f",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "NUT",
+                    "color": "#ffff00",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "ROD",
+                    "color": "#ff0000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "SCREW",
+                    "color": "#ff0000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "WASHER",
+                    "color": "#007f00",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  }
+                ],
+                "expanded": false,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "FLASHING",
+            "color": "#ceff7f",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "STEEL",
+            "color": "#0052d0",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          }
+        ],
+        "expanded": false,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      },
+      {
+        "guid": null,
+        "name": "LB",
+        "color": "#ffbf00",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "CE_LB",
+            "color": "#000000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "CE_STEEL",
+                "color": "#000000",
+                "rhino": null,
+                "children": [
+                  {
+                    "guid": null,
+                    "name": "CE_STEEL_EU",
+                    "color": "#0080FF",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "CE_STEEL_NA_SITE",
+                    "color": "#00D084",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "CE_STEEL_NA_SHOP",
+                    "color": "#004080",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  }
+                ],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_FASTENER",
+                "color": "#000000",
+                "rhino": null,
+                "children": [
+                  {
+                    "guid": null,
+                    "name": "CE_FASTENER_EU",
+                    "color": "#80FFFF",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "CE_FASTENER_NA_SITE",
+                    "color": "#80FF80",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  }
+                ],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_EMBED_NA",
+                "color": "#C0C0C0",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_RUBBER_NA",
+                "color": "#9C27B0",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_SHIM_NA",
+                "color": "#FFFF80",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_DAP",
+                "color": "#000000",
+                "rhino": null,
+                "children": [
+                  {
+                    "guid": null,
+                    "name": "DAP",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_CUT",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_DRILL",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_PLANE",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_PANEL",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_GLM",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_DLT",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_STEEL",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  }
+                ],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_PLUG",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_PREFAB",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_NUT_WASHER",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_BRACE",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_LEDGER",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_BLOCK",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_ROD",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_COVER",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_LAM",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_ASSEMBLY",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "CE_BRIDGE_SEGMENT",
+            "color": "#ffbf00",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "CE_CONNECTIONS",
+            "color": "#3fbf7f",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "GRID",
+            "color": "#ff00ff",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "ELEVATION_LINES",
+                "color": "#ff00ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "GRID_LINES",
+                "color": "#ff00ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "LINEWORK",
+            "color": "#ffbf00",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "REF_OBJECTS",
+            "color": "#a58cff",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "TEXT",
+            "color": "#ffbf00",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          }
+        ],
+        "expanded": false,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      },
+      {
+        "guid": null,
+        "name": "SC-LAYOUT",
+        "color": "#000000",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "SC-DIM",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.15"
+          },
+          {
+            "guid": null,
+            "name": "SC-DRAFT",
+            "color": "#bf0000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "SC-Lines",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "SC-Logo",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "SC-PROFILE",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "SC-SYMBOL",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.20"
+          },
+          {
+            "guid": null,
+            "name": "SC-TBLOCK",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.18"
+          },
+          {
+            "guid": null,
+            "name": "SC-TEXT",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.25"
+          }
+        ],
+        "expanded": false,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      },
+      {
+        "guid": null,
+        "name": "BR_LAYERSTACK",
+        "color": "#000000",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "USER",
+            "color": "#000000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "SC_ANN_DIM",
+                "color": "#006bd6",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_CENTER",
+                "color": "#4f4f4f",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Hidden",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_LIFTPOINTS",
+                "color": "#0000ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_TEXT",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_OUTLINE",
+                "color": "#00982d",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.18"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_PROFILE",
+                "color": "#007fff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_HIDD_A",
+                "color": "#651090",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_HIDD_B",
+                "color": "#9d53c0",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_HIDD_C",
+                "color": "#daabf2",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_HIDD_D",
+                "color": "#daabf2",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_HATCH_A",
+                "color": "#006c8d",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_HATCH_B",
+                "color": "#00b6b6",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_HATCH_C",
+                "color": "#96cdde",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_FAST",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_ACOUSTIC",
+                "color": "#ff00fa",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_MEMBRANE",
+                "color": "#f9a700",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_INFILLPARALLEL",
+                "color": "#00ff00",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Dots",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_INFILLPERP",
+                "color": "#9400ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Dots",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_STRONGBACK",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_RED",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.20"
+              },
+              {
+                "guid": null,
+                "name": "SC_TEMPORARY",
+                "color": "#0000ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_BLUE",
+                "color": "#0000ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LEAD",
+                "color": "#3278b4",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "AUTO",
+            "color": "#ff0000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "BR_ANN_DIM",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LEAD",
+                "color": "#3278b4",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_ELEM_LIFTPOINTS",
+                "color": "#0000ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_TEXT",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_OUTLINE",
+                "color": "#00982d",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.18"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_PROFILE",
+                "color": "#007fff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_HIDD_A",
+                "color": "#651090",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_HIDD_B",
+                "color": "#9d53c0",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_HIDD_C",
+                "color": "#daabf2",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_HIDD_D",
+                "color": "#daabf2",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_STITCH",
+                "color": "#ff00ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_HATCH_A",
+                "color": "#006c8d",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_HATCH_B",
+                "color": "#00b6b6",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_HATCH_C",
+                "color": "#96cdde",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_VIEWS",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "No Print"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_ELEM_SHEATH",
+                "color": "#ffffff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_ELEM_FAST",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              }
+            ],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          }
+        ],
+        "expanded": true,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      }
+    ],
+    "SC_STANDARD_FREEFORM": [
+      {
+        "guid": null,
+        "name": "SC-OBJECTS",
+        "color": "#000000",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "BILLET",
+            "color": "#F3BA5C",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "JIG",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "LATH",
+            "color": "#F3BA5C",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "RING_BEAM",
+            "color": "#F3BA5C",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "STEEL",
+            "color": "#696969",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "SHELL",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "PLINTH",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "SCREWS",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "RIGGING",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "CUTTERS",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          }
+        ],
+        "expanded": true,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      },
+      {
+        "guid": null,
+        "name": "SC-GRIDLINES",
+        "color": "#000000",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "Text",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "S-GRID",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.13"
+          },
+          {
+            "guid": null,
+            "name": "Reference_Curves",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          }
+        ],
+        "expanded": true,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      },
+      {
+        "guid": null,
+        "name": "LIBRARY",
+        "color": "#000000",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "CE_LB",
+            "color": "#000000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "CE_STEEL",
+                "color": "#000000",
+                "rhino": null,
+                "children": [
+                  {
+                    "guid": null,
+                    "name": "CE_STEEL_EU",
+                    "color": "#0080FF",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "CE_STEEL_NA_SITE",
+                    "color": "#00D084",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "CE_STEEL_NA_SHOP",
+                    "color": "#004080",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  }
+                ],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_FASTENER",
+                "color": "#000000",
+                "rhino": null,
+                "children": [
+                  {
+                    "guid": null,
+                    "name": "CE_FASTENER_EU",
+                    "color": "#80FFFF",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "CE_FASTENER_NA_SITE",
+                    "color": "#80FF80",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  }
+                ],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_EMBED_NA",
+                "color": "#C0C0C0",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_RUBBER_NA",
+                "color": "#9C27B0",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_SHIM_NA",
+                "color": "#FFFF80",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_DAP",
+                "color": "#000000",
+                "rhino": null,
+                "children": [
+                  {
+                    "guid": null,
+                    "name": "DAP",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_CUT",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_DRILL",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_PLANE",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_PANEL",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_GLM",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_DLT",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  },
+                  {
+                    "guid": null,
+                    "name": "DAP_STEEL",
+                    "color": "#000000",
+                    "rhino": null,
+                    "children": [],
+                    "expanded": true,
+                    "linetype": "Continuous",
+                    "printWidth": "Default"
+                  }
+                ],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_PLUG",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_PREFAB",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_NUT_WASHER",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_BRACE",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_LEDGER",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_BLOCK",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_ROD",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_COVER",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_LAM",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "CE_ASSEMBLY",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          }
+        ],
+        "expanded": true,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      },
+      {
+        "guid": null,
+        "name": "SC-LAYOUT",
+        "color": "#000000",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "SC-TBLOCK",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.18"
+          },
+          {
+            "guid": null,
+            "name": "SC-TEXT",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.25"
+          },
+          {
+            "guid": null,
+            "name": "SC-DIM",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.15"
+          },
+          {
+            "guid": null,
+            "name": "SC-Lines",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "SC-DRAFT",
+            "color": "#bf0000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "SC-Logo",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "SC-SYMBOL",
+            "color": "#000000",
+            "rhino": null,
+            "children": [],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "0.20"
+          }
+        ],
+        "expanded": false,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      },
+      {
+        "guid": null,
+        "name": "BR_LAYERSTACK",
+        "color": "#000000",
+        "rhino": null,
+        "children": [
+          {
+            "guid": null,
+            "name": "USER",
+            "color": "#000000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "SC_ANN_DIM",
+                "color": "#006bd6",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_CENTER",
+                "color": "#4f4f4f",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Hidden",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_LIFTPOINTS",
+                "color": "#0000ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_TEXT",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_OUTLINE",
+                "color": "#00982d",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.18"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_PROFILE",
+                "color": "#007fff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_HIDD_A",
+                "color": "#651090",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_HIDD_B",
+                "color": "#9d53c0",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_HIDD_C",
+                "color": "#daabf2",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LINE_HIDD_D",
+                "color": "#daabf2",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_HATCH_A",
+                "color": "#006c8d",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_HATCH_B",
+                "color": "#00b6b6",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_HATCH_C",
+                "color": "#96cdde",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_FAST",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_ACOUSTIC",
+                "color": "#ff00fa",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_MEMBRANE",
+                "color": "#f9a700",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_INFILLPARALLEL",
+                "color": "#00ff00",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Dots",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_INFILLPERP",
+                "color": "#9400ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Dots",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_ELEM_STRONGBACK",
+                "color": "#696969",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_RED",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.20"
+              },
+              {
+                "guid": null,
+                "name": "SC_TEMPORARY",
+                "color": "#0000ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_BLUE",
+                "color": "#0000ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "SC_ANN_LEAD",
+                "color": "#3278b4",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              }
+            ],
+            "expanded": true,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          },
+          {
+            "guid": null,
+            "name": "AUTO",
+            "color": "#ff0000",
+            "rhino": null,
+            "children": [
+              {
+                "guid": null,
+                "name": "BR_ANN_DIM",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LEAD",
+                "color": "#3278b4",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_ELEM_LIFTPOINTS",
+                "color": "#0000ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_TEXT",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.13"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_OUTLINE",
+                "color": "#00982d",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.18"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_PROFILE",
+                "color": "#007fff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_HIDD_A",
+                "color": "#651090",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_HIDD_B",
+                "color": "#9d53c0",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_HIDD_C",
+                "color": "#daabf2",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_HIDD_D",
+                "color": "#daabf2",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_LINE_STITCH",
+                "color": "#ff00ff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_HATCH_A",
+                "color": "#006c8d",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_HATCH_B",
+                "color": "#00b6b6",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_HATCH_C",
+                "color": "#96cdde",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_VIEWS",
+                "color": "#000000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "No Print"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_ELEM_SHEATH",
+                "color": "#ffffff",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "Default"
+              },
+              {
+                "guid": null,
+                "name": "BR_ANN_ELEM_FAST",
+                "color": "#ff0000",
+                "rhino": null,
+                "children": [],
+                "expanded": true,
+                "linetype": "Continuous",
+                "printWidth": "0.05"
+              }
+            ],
+            "expanded": false,
+            "linetype": "Continuous",
+            "printWidth": "Default"
+          }
+        ],
+        "expanded": true,
+        "linetype": "Continuous",
+        "printWidth": "Default"
+      }
+    ]
+  }
+}
