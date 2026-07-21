@@ -73,21 +73,29 @@ A layer's expected types = all rows where `home_layer` = that layer (primary fir
 - Table created on boot via `CREATE TABLE IF NOT EXISTS` (no migration).
 
 ## Build status (Phases 1–3 done and deployed — 2026-07-21)
-- **Phase 1 ✓** — `object_types` table + CRUD/import API in `server.js`; `scripts/seed_object_types.js`
-  derives one type per `SC-OBJECTS` leaf from the live standards (64 seeded).
-- **Phase 2 ✓** — `index.html` broadcasts the selected layer on `BroadcastChannel("sc-objects")`
-  (+ localStorage fallback); "⧉ Object types" button opens the companion window.
-- **Phase 3 ✓** — `public/objects.html` companion window: syncs to the selected layer, lists its
-  expected types (primary first), and does inline add/edit/delete (name, category, branch_key, notes, primary).
+- **Phase 1 ✓** — `object_types` table + CRUD/import API in `server.js`.
+- **Phase 2 ✓** — `index.html` drives the companion via `BroadcastChannel("sc-objects")` on **hover**
+  (mouseenter) and selection, reverting to the selected layer on `mouseleave`; broadcasts `isLeaf`
+  and (for cross-window fallback) stores `{name,isLeaf}` JSON in `localStorage`. Light/dark theme is
+  synced both ways (`{type:"theme"}` + shared `sc-theme` key). "⧉ Object types" button opens it.
+- **Phase 3 ✓** — `public/objects.html` companion: floating rounded drop-shadow panel + titlebar/
+  palette matching the emulator; hover-preview; inline add/edit/**delete via in-app modal** (native
+  `confirm()` is blocked in the Notion iframe/popup); trash icon. **Parent layers are blocked** —
+  only final child (leaf) layers hold objects. "+ Add" pre-fills name + category from the layer name.
+- **Naming glossary ✓** — `public/layer-humanize.js` (UMD, from `Layer_Naming_Acronyms.md`) is the
+  single source of truth for `humanizeLayer()` + `guessCategory()`, used by the browser and the
+  Node scripts (`GLM`→Glulam, `DLT`/`CE`/`EU`/`NA` stay uppercase, `TOOL` dropped, `STRONG_BACK`→
+  Strongback, `PRE_DRILL`→Pre-Drill, …).
 - **Phase 4** — not started (future model-health).
-- **Deployed ✓** — repo pushed to `github.com/Marsh-biz/rhino-layer-app` (grafted onto the real
-  project history — the working copy had no local `.git` even though it was already live). Railway
-  is connected to this repo for auto-deploy on push to `main`; the push auto-deployed within
-  seconds and the catalog was seeded live via
-  `node standards/scripts/seed_object_types.js https://layers-structurecraft.up.railway.app`
-  (64 types imported, verified via `/api/object-types`). Added `railway.json` (Nixpacks build,
-  `/healthz` healthcheck) and gitignored local `.claude/` settings.
-  `branch_key` stays blank until verified against a real Branch model (see §3).
+- **Deployed ✓** — repo `github.com/Marsh-biz/rhino-layer-app`; Railway auto-deploys on push to
+  `main`. Catalog seeded live from **every `SC[_-]OBJECTS` leaf across all three standards**
+  (`node standards/scripts/seed_object_types.js https://layers-structurecraft.up.railway.app`) —
+  **133 object types**, keyed to the full layer names the emulator broadcasts (e.g. `SC_GLM_BEAM`
+  → "Glulam Beam"). The building standard uses full names (`SC_GLM_BEAM`, `LIB_*`); bridge/freeform
+  still use shorter ones (`GLM`, `CE_STEEL_EU`) — the catalog is a global union keyed by layer name,
+  so each standard's layers match their own rows. `repopulate_object_names.js` re-derives name/
+  category for existing rows without wiping `branch_key`/notes/primary. `branch_key` stays blank
+  until verified against a real Branch model (see §3). Added `railway.json` + gitignored `.claude/`.
 
 ## 6. Build phases
 **Phase 1 — Catalog data + API + seed**
