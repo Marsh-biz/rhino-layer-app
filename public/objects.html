@@ -5,147 +5,413 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Object Types</title>
 <style>
-  :root{
-    --bg:#f0f0f0; --panel:#ffffff; --border:#d7d7d7; --border2:#c2c2c2;
-    --text:#1f1f1f; --dim:#6a6a6a; --accent:#0078d7; --danger:#c0392b;
-    --chip:#eef4fb; --input:#ffffff; --font:"Segoe UI","Inter",system-ui,sans-serif;
+  /* Shared palette with the layer emulator (index.html) so the two windows match. */
+  :root {
+    --panel-bg: #2f2f33;
+    --panel-bg-deep: #26262a;
+    --list-bg: #2f2f33;
+    --row-hover: #3a3a3f;
+    --row-selected: #33507a;
+    --row-selected-border: #4d7bbd;
+    --border: #1e1e21;
+    --border-light: #46464c;
+    --text: #e6e6e8;
+    --text-dim: #9a9aa2;
+    --accent: #4d9fe0;
+    --danger: #d1605c;
+    --input-bg: #232326;
+    --input-hover: #2b2b2f;
+    --btn-bg: #3d3d43;
+    --btn-hover: #4a4a51;
+    --btn-active: #333338;
+    --tooltip-bg: #1b1b1e;
+    --titlebar-a: #3a3a3f;
+    --titlebar-b: #313136;
+    --scroll-thumb: #4a4a51;
+    --drop-tint: rgba(77,159,224,.16);
+    --danger-hover-bg: #5a3735;
+    --font: "Segoe UI", "Inter", system-ui, -apple-system, sans-serif;
+    --mono: "Consolas", "SF Mono", monospace;
   }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:13px;height:100vh;display:flex;flex-direction:column}
-  header{padding:10px 14px;background:var(--panel);border-bottom:1px solid var(--border);}
-  header .title{font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px}
-  header .layer{margin-top:4px;font-family:"Consolas",monospace;font-size:13px;color:var(--accent);word-break:break-all}
-  header .hint{margin-top:4px;color:var(--dim);font-size:11.5px}
-  #list{flex:1;overflow-y:auto;padding:10px 12px}
-  .card{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:8px}
-  .card.primary{border-left:3px solid var(--accent)}
-  .row{display:flex;gap:8px;align-items:center;margin-bottom:6px}
-  .row:last-child{margin-bottom:0}
-  label{color:var(--dim);font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;width:74px;flex:none}
-  input[type=text],textarea,select{flex:1;background:var(--input);color:var(--text);border:1px solid var(--border2);border-radius:4px;padding:5px 7px;font-family:var(--font);font-size:12.5px;outline:none}
-  input:focus,textarea:focus,select:focus{border-color:var(--accent)}
-  textarea{resize:vertical;min-height:34px}
-  .card .name{font-weight:600;font-size:13.5px}
-  .card-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-  .badge{font-size:9.5px;font-weight:700;letter-spacing:.5px;color:var(--accent);background:var(--chip);border:1px solid #cfe0f3;border-radius:10px;padding:2px 7px;text-transform:uppercase}
-  .spacer{flex:1}
-  .prim{display:flex;align-items:center;gap:5px;color:var(--dim);font-size:11.5px;cursor:pointer;white-space:nowrap}
-  .del{background:transparent;border:1px solid var(--border2);color:var(--danger);border-radius:4px;padding:3px 8px;font-size:11.5px;cursor:pointer}
-  .del:hover{background:#fbeceb;border-color:var(--danger)}
-  #add{margin:2px 12px 10px;padding:8px;border:1px dashed var(--border2);background:transparent;color:var(--accent);border-radius:6px;cursor:pointer;font-family:var(--font);font-size:12.5px}
-  #add:hover{background:var(--chip)}
-  .empty{padding:30px 16px;text-align:center;color:var(--dim)}
-  .status{padding:6px 14px;border-top:1px solid var(--border);color:var(--dim);font-size:11px;background:var(--panel);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  @media (prefers-color-scheme: dark){
-    :root{--bg:#26262a;--panel:#2f2f33;--border:#1e1e21;--border2:#46464c;--text:#e6e6e8;--dim:#9a9aa2;--accent:#4d9fe0;--danger:#d1605c;--chip:#33507a;--input:#232326;}
-    .badge{border-color:#3a5a86}.del:hover{background:#5a3735}
+  body.light {
+    --panel-bg: #f0f0f0;
+    --panel-bg-deep: #e4e4e4;
+    --list-bg: #ffffff;
+    --row-hover: #eaf2fb;
+    --row-selected: #cce4f7;
+    --row-selected-border: #90c3ef;
+    --border: #ababab;
+    --border-light: #bdbdbd;
+    --text: #1f1f1f;
+    --text-dim: #5c5c5c;
+    --accent: #0078d7;
+    --input-bg: #ffffff;
+    --input-hover: #f3f9ff;
+    --btn-bg: #fbfbfb;
+    --btn-hover: #e6f2fc;
+    --btn-active: #d9ecfb;
+    --tooltip-bg: #fafafa;
+    --titlebar-a: #fbfbfb;
+    --titlebar-b: #ececec;
+    --scroll-thumb: #c2c2c2;
+    --drop-tint: rgba(0,120,215,.12);
+    --danger-hover-bg: #f3dad9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--font);
+    background: var(--panel-bg);
+    color: var(--text);
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Title bar — mirrors the layer emulator's */
+  .titlebar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: linear-gradient(var(--titlebar-a), var(--titlebar-b));
+    border-bottom: 1px solid var(--border);
+    font-weight: 600;
+    letter-spacing: .2px;
+    flex: none;
+  }
+  .titlebar .tb-icon { color: var(--accent); font-size: 16px; line-height: 1; }
+  .titlebar .sub { color: var(--text-dim); font-weight: 400; font-size: 11.5px; margin-left: auto; }
+
+  .tool {
+    width: 30px; height: 26px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    color: var(--text);
+    cursor: pointer;
+    position: relative;
+  }
+  .tool:hover { background: var(--btn-hover); border-color: var(--border-light); }
+  .tool:active { background: var(--btn-active); }
+  .tool svg { width: 16px; height: 16px; display: block; }
+  .tool::after {
+    content: attr(data-tip);
+    position: absolute; top: 110%; right: 0;
+    background: var(--tooltip-bg);
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    font-size: 11px; padding: 3px 7px; border-radius: 3px;
+    white-space: nowrap; opacity: 0; pointer-events: none;
+    transition: opacity .12s; z-index: 30;
+  }
+  .tool:hover::after { opacity: 1; }
+
+  /* Current-layer bar */
+  .layerbar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 12px;
+    background: var(--panel-bg-deep);
+    border-bottom: 1px solid var(--border);
+    flex: none;
+  }
+  .layerbar .lb-label {
+    font-size: 10.5px; text-transform: uppercase; letter-spacing: .5px;
+    color: var(--text-dim); flex: none;
+  }
+  .layerbar .lb-name {
+    font-family: var(--mono); font-size: 12.5px; color: var(--accent);
+    word-break: break-all; flex: 1;
+  }
+  .layerbar .lb-count {
+    font-size: 11px; color: var(--text-dim); flex: none; white-space: nowrap;
+  }
+
+  #list { flex: 1; overflow-y: auto; padding: 10px 12px; background: var(--panel-bg); }
+  #list::-webkit-scrollbar { width: 10px; }
+  #list::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 5px; }
+
+  .card {
+    background: var(--list-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 8px;
+  }
+  .card.primary { border-left: 3px solid var(--accent); }
+  .card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .card .name { font-weight: 600; font-size: 13.5px; }
+  .badge {
+    font-size: 9.5px; font-weight: 700; letter-spacing: .5px;
+    color: var(--accent); background: var(--drop-tint);
+    border: 1px solid var(--row-selected-border);
+    border-radius: 10px; padding: 2px 7px; text-transform: uppercase;
+  }
+  .spacer { flex: 1; }
+  .prim {
+    display: flex; align-items: center; gap: 5px;
+    color: var(--text-dim); font-size: 11.5px; cursor: pointer; white-space: nowrap;
+  }
+  .del {
+    background: transparent; border: 1px solid var(--border-light);
+    color: var(--danger); border-radius: 3px; padding: 3px 8px;
+    font-size: 11.5px; cursor: pointer;
+  }
+  .del:hover { background: var(--danger-hover-bg); border-color: var(--danger); }
+
+  .fl-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .fl-row:last-child { margin-bottom: 0; }
+  .fl-label {
+    color: var(--text-dim); font-size: 10.5px; text-transform: uppercase;
+    letter-spacing: .5px; width: 74px; flex: none;
+  }
+  input[type=text], textarea, select {
+    flex: 1; width: 100%;
+    background: var(--input-bg); color: var(--text);
+    border: 1px solid var(--border-light); border-radius: 3px;
+    padding: 5px 7px; font-family: var(--font); font-size: 12.5px; outline: none;
+  }
+  textarea { resize: vertical; min-height: 34px; font-family: var(--font); }
+  input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+
+  #add {
+    margin: 2px 12px 10px; padding: 8px;
+    border: 1px dashed var(--border-light); background: transparent;
+    color: var(--accent); border-radius: 5px; cursor: pointer;
+    font-family: var(--font); font-size: 12.5px; flex: none;
+  }
+  #add:hover { background: var(--drop-tint); }
+
+  .empty { padding: 30px 16px; text-align: center; color: var(--text-dim); line-height: 1.6; }
+  .notice {
+    margin: 12px; padding: 14px 16px;
+    border: 1px dashed var(--border-light); border-radius: 6px;
+    background: var(--panel-bg-deep); color: var(--text-dim);
+    font-size: 12.5px; line-height: 1.6;
+  }
+  .notice strong { color: var(--text); }
+  .notice .mono { font-family: var(--mono); color: var(--accent); }
+
+  .status {
+    padding: 6px 12px; border-top: 1px solid var(--border);
+    color: var(--text-dim); font-size: 11px; background: var(--panel-bg);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: none;
   }
 </style>
 </head>
-<body>
-  <header>
-    <div class="title">⧉ Object Types</div>
-    <div class="layer" id="layer">— no layer selected —</div>
-    <div class="hint" id="hint">Select a layer in the emulator to see its expected Branch object types.</div>
-  </header>
+<body class="light">
+  <div class="titlebar">
+    <span class="tb-icon" aria-hidden="true">⧉</span>
+    <span>Object Types</span>
+    <span class="sub">expected Branch objects per layer</span>
+    <button class="tool" id="themeToggle" data-tip="Dark mode"></button>
+  </div>
+
+  <div class="layerbar">
+    <span class="lb-label">Layer</span>
+    <span class="lb-name" id="layer">— none —</span>
+    <span class="lb-count" id="count"></span>
+  </div>
+
   <div id="list"></div>
+  <div id="parentNotice" class="notice" hidden></div>
   <button id="add" hidden>+ Add object type for this layer</button>
   <div class="status" id="status">Waiting for the layer emulator…</div>
 
 <script>
-(function(){
+(function () {
   "use strict";
-  const listEl=document.getElementById("list");
-  const layerEl=document.getElementById("layer");
-  const hintEl=document.getElementById("hint");
-  const addBtn=document.getElementById("add");
-  const statusEl=document.getElementById("status");
-  const CATEGORIES=["Glulam","Steel","CLT","DLT","Blocking","Timber","Machining","Connection","Other"];
-  let currentLayer=null;
-  let statusTimer=null;
-  function say(msg){ statusEl.textContent=msg; clearTimeout(statusTimer); statusTimer=setTimeout(()=>{ statusEl.textContent=currentLayer?("Layer: "+currentLayer):"Waiting for the layer emulator…"; },2500); }
+  const listEl = document.getElementById("list");
+  const layerEl = document.getElementById("layer");
+  const countEl = document.getElementById("count");
+  const addBtn = document.getElementById("add");
+  const statusEl = document.getElementById("status");
+  const parentNotice = document.getElementById("parentNotice");
+  const themeBtn = document.getElementById("themeToggle");
 
-  function setLayer(name){
-    name=name||null;
-    if(name===currentLayer) return;
-    currentLayer=name;
-    layerEl.textContent=name||"— no layer selected —";
-    hintEl.style.display=name?"none":"";
-    addBtn.hidden=!name;
+  const CATEGORIES = ["Glulam", "Steel", "CLT", "DLT", "Blocking", "Timber", "Machining", "Connection", "Other"];
+  const SHARED_THEME_KEY = "sc-theme";
+  const ICON_SUN = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="8" cy="8" r="3.2"/><path d="M8 1.2v1.8M8 13v1.8M1.2 8H3M13 8h1.8M3.2 3.2l1.3 1.3M11.5 11.5l1.3 1.3M12.8 3.2l-1.3 1.3M4.5 11.5l-1.3 1.3"/></svg>';
+  const ICON_MOON = '<svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.4 9.9A5.6 5.6 0 0 1 6.1 2.6 5.9 5.9 0 1 0 13.4 9.9z"/></svg>';
+
+  let currentLayer = null;
+  let currentIsLeaf = true;
+  let statusTimer = null;
+
+  function escapeHtml(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, c =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+  function restingStatus() {
+    return currentLayer ? ("Layer: " + currentLayer) : "Waiting for the layer emulator…";
+  }
+  function say(msg) {
+    statusEl.textContent = msg;
+    clearTimeout(statusTimer);
+    statusTimer = setTimeout(() => { statusEl.textContent = restingStatus(); }, 2500);
+  }
+
+  // ---- Theme (kept in lock-step with the layer emulator) ----
+  function applyThemeUI(isLight) {
+    document.body.classList.toggle("light", isLight);
+    themeBtn.innerHTML = isLight ? ICON_MOON : ICON_SUN;
+    themeBtn.dataset.tip = isLight ? "Dark mode" : "Light mode";
+  }
+  function setTheme(isLight, broadcast) {
+    isLight = !!isLight;
+    applyThemeUI(isLight);
+    try { localStorage.setItem(SHARED_THEME_KEY, isLight ? "light" : "dark"); } catch (e) {}
+    if (broadcast && channel) channel.postMessage({ type: "theme", light: isLight });
+  }
+  themeBtn.addEventListener("click", () => setTheme(!document.body.classList.contains("light"), true));
+
+  // ---- Layer selection / hover ----
+  function setLayer(name, isLeaf) {
+    name = name || null;
+    // isLeaf is absent on the localStorage fallback path; assume leaf so it still works.
+    const leaf = (isLeaf === undefined || isLeaf === null) ? true : !!isLeaf;
+    if (name === currentLayer && leaf === currentIsLeaf) return;
+    currentLayer = name;
+    currentIsLeaf = leaf;
+    layerEl.textContent = name || "— none —";
+    countEl.textContent = "";
+
+    if (!name) {
+      parentNotice.hidden = true;
+      addBtn.hidden = true;
+      listEl.innerHTML = '<div class="empty">Select or hover a layer in the emulator<br>to see its expected Branch object types.</div>';
+      statusEl.textContent = "Waiting for the layer emulator…";
+      return;
+    }
+    if (!leaf) {
+      // Parent layers never hold objects — only final child layers do.
+      listEl.innerHTML = "";
+      addBtn.hidden = true;
+      parentNotice.hidden = false;
+      parentNotice.innerHTML =
+        '<strong>' + escapeHtml(name) + '</strong> is a parent layer.<br><br>' +
+        'Object types are assigned to <strong>final child layers</strong> only. ' +
+        'Pick a leaf layer (one with no sublayers) to define the objects that belong on it.';
+      statusEl.textContent = "Parent layer · no objects assigned here";
+      return;
+    }
+    parentNotice.hidden = true;
+    addBtn.hidden = false;
     load();
   }
 
-  async function load(){
-    if(!currentLayer){ listEl.innerHTML=""; statusEl.textContent="Waiting for the layer emulator…"; return; }
-    try{
-      const r=await fetch("api/object-types?home_layer="+encodeURIComponent(currentLayer));
-      const {types}=await r.json();
-      render(types||[]);
-      statusEl.textContent="Layer: "+currentLayer+"  ·  "+(types||[]).length+" object type"+((types||[]).length===1?"":"s");
-    }catch(e){ listEl.innerHTML='<div class="empty">Couldn’t reach the server.</div>'; }
+  async function load() {
+    if (!currentLayer || !currentIsLeaf) return;
+    try {
+      const r = await fetch("api/object-types?home_layer=" + encodeURIComponent(currentLayer));
+      const { types } = await r.json();
+      render(types || []);
+      const n = (types || []).length;
+      countEl.textContent = n + " type" + (n === 1 ? "" : "s");
+      statusEl.textContent = "Layer: " + currentLayer;
+    } catch (e) {
+      listEl.innerHTML = '<div class="empty">Couldn’t reach the server.</div>';
+    }
   }
 
-  function field(labelTxt, value, onSave, opts){
-    opts=opts||{};
-    const row=document.createElement("div"); row.className="row";
-    const lab=document.createElement("label"); lab.textContent=labelTxt; row.appendChild(lab);
+  function field(labelTxt, value, onSave, opts) {
+    opts = opts || {};
+    const row = document.createElement("div"); row.className = "fl-row";
+    const lab = document.createElement("label"); lab.className = "fl-label"; lab.textContent = labelTxt;
+    row.appendChild(lab);
     let input;
-    if(opts.select){ input=document.createElement("select"); (opts.options||[]).forEach(o=>{const op=document.createElement("option");op.value=o;op.textContent=o;input.appendChild(op);}); input.value=value||""; }
-    else if(opts.textarea){ input=document.createElement("textarea"); input.value=value||""; }
-    else { input=document.createElement("input"); input.type="text"; input.value=value||""; if(opts.placeholder) input.placeholder=opts.placeholder; }
-    input.addEventListener("change",()=>onSave(input.value));
-    row.appendChild(input); return row;
+    if (opts.select) {
+      input = document.createElement("select");
+      (opts.options || []).forEach(o => { const op = document.createElement("option"); op.value = o; op.textContent = o; input.appendChild(op); });
+      input.value = value || "";
+    } else if (opts.textarea) {
+      input = document.createElement("textarea"); input.value = value || "";
+    } else {
+      input = document.createElement("input"); input.type = "text"; input.value = value || "";
+      if (opts.placeholder) input.placeholder = opts.placeholder;
+    }
+    input.addEventListener("change", () => onSave(input.value));
+    row.appendChild(input);
+    return row;
   }
 
-  function render(types){
-    listEl.innerHTML="";
-    if(!types.length){ listEl.innerHTML='<div class="empty">No object types mapped to this layer yet.<br>Use “+ Add” below to define one.</div>'; return; }
-    for(const t of types){
-      const card=document.createElement("div"); card.className="card"+(t.is_primary?" primary":"");
-      const head=document.createElement("div"); head.className="card-head";
-      const nm=document.createElement("span"); nm.className="name"; nm.textContent=t.name||"(unnamed)"; head.appendChild(nm);
-      if(t.is_primary){ const b=document.createElement("span"); b.className="badge"; b.textContent="Primary"; head.appendChild(b); }
-      const sp=document.createElement("span"); sp.className="spacer"; head.appendChild(sp);
-      const prim=document.createElement("label"); prim.className="prim";
-      const cb=document.createElement("input"); cb.type="checkbox"; cb.checked=!!t.is_primary;
-      cb.addEventListener("change",()=>{ t.is_primary=cb.checked; save(t); });
+  function render(types) {
+    listEl.innerHTML = "";
+    if (!types.length) {
+      listEl.innerHTML = '<div class="empty">No object types mapped to this layer yet.<br>Use “+ Add” below to define one.</div>';
+      return;
+    }
+    for (const t of types) {
+      const card = document.createElement("div"); card.className = "card" + (t.is_primary ? " primary" : "");
+      const head = document.createElement("div"); head.className = "card-head";
+      const nm = document.createElement("span"); nm.className = "name"; nm.textContent = t.name || "(unnamed)"; head.appendChild(nm);
+      if (t.is_primary) { const b = document.createElement("span"); b.className = "badge"; b.textContent = "Primary"; head.appendChild(b); }
+      const sp = document.createElement("span"); sp.className = "spacer"; head.appendChild(sp);
+      const prim = document.createElement("label"); prim.className = "prim";
+      const cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!t.is_primary;
+      cb.addEventListener("change", () => { t.is_primary = cb.checked; save(t); });
       prim.appendChild(cb); prim.appendChild(document.createTextNode("primary")); head.appendChild(prim);
-      const del=document.createElement("button"); del.className="del"; del.textContent="Delete";
-      del.addEventListener("click",()=>{ if(confirm("Delete object type “"+(t.name||"")+"”?")) remove(t.id); });
+      const del = document.createElement("button"); del.className = "del"; del.textContent = "Delete";
+      del.addEventListener("click", () => { if (confirm("Delete object type “" + (t.name || "") + "”?")) remove(t.id); });
       head.appendChild(del);
       card.appendChild(head);
-      card.appendChild(field("Name", t.name, v=>{ t.name=v; nm.textContent=v||"(unnamed)"; save(t); }));
-      card.appendChild(field("Category", t.category, v=>{ t.category=v; save(t); }, {select:true, options:CATEGORIES}));
-      card.appendChild(field("Branch key", t.branch_key, v=>{ t.branch_key=v; save(t); }, {placeholder:"Branch class (fill once verified)"}));
-      card.appendChild(field("Notes", t.description, v=>{ t.description=v; save(t); }, {textarea:true}));
+      card.appendChild(field("Name", t.name, v => { t.name = v; nm.textContent = v || "(unnamed)"; save(t); }));
+      card.appendChild(field("Category", t.category, v => { t.category = v; save(t); }, { select: true, options: CATEGORIES }));
+      card.appendChild(field("Branch key", t.branch_key, v => { t.branch_key = v; save(t); }, { placeholder: "Branch class (fill once verified)" }));
+      card.appendChild(field("Notes", t.description, v => { t.description = v; save(t); }, { textarea: true }));
       listEl.appendChild(card);
     }
   }
 
-  async function save(t){
-    try{
-      await fetch("api/object-types/"+encodeURIComponent(t.id),{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(t)});
-      say("Saved “"+(t.name||"")+"”");
-    }catch(e){ say("Save failed"); }
+  async function save(t) {
+    try {
+      await fetch("api/object-types/" + encodeURIComponent(t.id), {
+        method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(t)
+      });
+      say("Saved “" + (t.name || "") + "”");
+    } catch (e) { say("Save failed"); }
   }
-  async function remove(id){
-    try{ await fetch("api/object-types/"+encodeURIComponent(id),{method:"DELETE"}); say("Deleted"); load(); }
-    catch(e){ say("Delete failed"); }
+  async function remove(id) {
+    try { await fetch("api/object-types/" + encodeURIComponent(id), { method: "DELETE" }); say("Deleted"); load(); }
+    catch (e) { say("Delete failed"); }
   }
-  addBtn.addEventListener("click",()=>{
-    if(!currentLayer) return;
-    const t={id:(crypto.randomUUID?crypto.randomUUID():"ot_"+Date.now()), name:"New object type", category:"Other", description:"", home_layer:currentLayer, branch_key:"", is_primary:false};
+  addBtn.addEventListener("click", () => {
+    if (!currentLayer || !currentIsLeaf) return;
+    const t = {
+      id: (crypto.randomUUID ? crypto.randomUUID() : "ot_" + Date.now()),
+      name: "New object type", category: "Other", description: "",
+      home_layer: currentLayer, branch_key: "", is_primary: false
+    };
     save(t).then(load);
   });
 
-  // ---- sync with the emulator ----
-  const channel=("BroadcastChannel" in window)?new BroadcastChannel("sc-objects"):null;
-  if(channel){
-    channel.onmessage=(e)=>{ if(e&&e.data&&e.data.type==="select") setLayer(e.data.layer); };
-    channel.postMessage({type:"hello"}); // ask the emulator for the current selection
+  // ---- Sync with the layer emulator ----
+  const channel = ("BroadcastChannel" in window) ? new BroadcastChannel("sc-objects") : null;
+  if (channel) {
+    channel.onmessage = (e) => {
+      const d = e && e.data; if (!d) return;
+      if (d.type === "select") setLayer(d.layer, d.isLeaf);
+      else if (d.type === "theme") setTheme(!!d.light, false);
+    };
+    channel.postMessage({ type: "hello" }); // ask the emulator for its current selection + theme
   }
-  window.addEventListener("storage",(e)=>{ if(e.key==="sc-selected-layer") setLayer(e.newValue||null); });
-  try{ const init=localStorage.getItem("sc-selected-layer"); if(init) setLayer(init); }catch(e){}
+  window.addEventListener("storage", (e) => {
+    if (e.key === "sc-selected-layer") setLayer(e.newValue || null);
+    else if (e.key === SHARED_THEME_KEY) setTheme(e.newValue !== "dark", false);
+  });
+
+  // ---- Init: theme first (so there's no flash), then any stored selection ----
+  (function initTheme() {
+    let isLight = true;
+    try {
+      const s = localStorage.getItem(SHARED_THEME_KEY);
+      if (s === "dark") isLight = false; else if (s === "light") isLight = true;
+    } catch (e) {}
+    setTheme(isLight, false);
+  })();
+  try { const init = localStorage.getItem("sc-selected-layer"); if (init) setLayer(init); } catch (e) {}
+  if (!currentLayer) setLayer(null);
 })();
 </script>
 </body>

@@ -948,23 +948,32 @@
   const objChannel = ("BroadcastChannel" in window) ? new BroadcastChannel("sc-objects") : null;
   const NO_BROADCAST = {}; // sentinel: never equals a real layer name or null
   let lastBroadcastLayer = NO_BROADCAST;
-  // Push a specific layer name to the companion window (deduped). Pass null to clear.
-  function broadcastLayer(name) {
+  // Push a specific layer to the companion window (deduped by name). Pass null to clear.
+  // Also reports isLeaf: only final child layers (no sublayers) may hold object types.
+  function broadcastLayer(node) {
+    const name = node ? node.name : null;
     if (name === lastBroadcastLayer) return;
     lastBroadcastLayer = name;
+    const isLeaf = !!(node && (!node.children || node.children.length === 0));
     try { localStorage.setItem("sc-selected-layer", name == null ? "" : name); } catch (e) {}
-    if (objChannel) objChannel.postMessage({ type: "select", layer: name });
+    if (objChannel) objChannel.postMessage({ type: "select", layer: name, isLeaf: isLeaf });
   }
-  function selectedLayerName() {
+  function selectedNode() {
     const hit = selectedId ? find(selectedId) : null;
-    return hit ? hit.node.name : null;
+    return hit ? hit.node : null;
   }
   // Resting state (no row hovered) shows the selected layer's object types.
-  function broadcastSelection() { broadcastLayer(selectedLayerName()); }
+  function broadcastSelection() { broadcastLayer(selectedNode()); }
   if (objChannel) {
     objChannel.onmessage = (e) => {
-      // the companion window just opened and asked for the current selection
-      if (e && e.data && e.data.type === "hello") { lastBroadcastLayer = NO_BROADCAST; broadcastSelection(); }
+      const d = e && e.data; if (!d) return;
+      // the companion window just opened and asked for the current selection + theme
+      if (d.type === "hello") {
+        lastBroadcastLayer = NO_BROADCAST; broadcastSelection();
+        objChannel.postMessage({ type: "theme", light: isLight });
+      } else if (d.type === "theme") {
+        setTheme(!!d.light, false); // companion toggled the theme -> match it here
+      }
     };
   }
   // Leaving the layer table returns the companion to the selected layer.
@@ -1158,7 +1167,7 @@
     row.appendChild(ltCell);
     row.appendChild(pwCell);
 
-    row.addEventListener("mouseenter", () => broadcastLayer(layer.name));
+    row.addEventListener("mouseenter", () => broadcastLayer(layer));
     row.addEventListener("mousedown", () => {
       if (selectedId !== layer.id) {
         selectedId = layer.id;
@@ -1952,6 +1961,7 @@
 
   // ---- Theme ----
   const THEME_KEY = "rhino-layer-emulator-theme";
+  const SHARED_THEME_KEY = "sc-theme"; // cross-window theme shared with the object-types companion
   const ICON_SUN = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="8" cy="8" r="3.2"/><path d="M8 1.2v1.8M8 13v1.8M1.2 8H3M13 8h1.8M3.2 3.2l1.3 1.3M11.5 11.5l1.3 1.3M12.8 3.2l-1.3 1.3M4.5 11.5l-1.3 1.3"/></svg>';
   const ICON_MOON = '<svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.4 9.9A5.6 5.6 0 0 1 6.1 2.6 5.9 5.9 0 1 0 13.4 9.9z"/></svg>';
   const themeBtn = document.getElementById("themeToggle");
@@ -1962,22 +1972,28 @@
     themeBtn.innerHTML = isLight ? ICON_MOON : ICON_SUN;
     themeBtn.dataset.tip = isLight ? "Dark mode" : "Light mode";
   }
-  themeBtn.addEventListener("click", () => {
-    isLight = !isLight;
+  // Apply a theme, persist it (locally + a shared key the companion reads), and
+  // optionally broadcast so the object-types window switches in lock-step.
+  function setTheme(light, broadcast) {
+    isLight = !!light;
     applyTheme();
-    try {
-      if (window.storage && window.storage.set) window.storage.set(THEME_KEY, isLight ? "light" : "dark");
-    } catch (e) { /* in-memory only */ }
-  });
+    try { localStorage.setItem(SHARED_THEME_KEY, isLight ? "light" : "dark"); } catch (e) {}
+    try { if (window.storage && window.storage.set) window.storage.set(THEME_KEY, isLight ? "light" : "dark"); } catch (e) { /* in-memory only */ }
+    if (broadcast && objChannel) objChannel.postMessage({ type: "theme", light: isLight });
+  }
+  themeBtn.addEventListener("click", () => setTheme(!isLight, true));
   (async function loadTheme() {
+    let light = true; // light mode is the default
     try {
-      if (window.storage && window.storage.get) {
+      const shared = localStorage.getItem(SHARED_THEME_KEY);
+      if (shared === "dark") light = false;
+      else if (shared === "light") light = true;
+      else if (window.storage && window.storage.get) {
         const res = await window.storage.get(THEME_KEY);
-        if (res && res.value === "dark") { isLight = false; }
-        else if (res && res.value === "light") { isLight = true; }
+        if (res && res.value === "dark") light = false;
       }
     } catch (e) { /* default light */ }
-    applyTheme();
+    setTheme(light, false);
   })();
 
   // ---- Init ----
