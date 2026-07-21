@@ -7,7 +7,9 @@ const path = require("path");
 const { humanizeLayer, guessCategory } = require(path.join(__dirname, "..", "..", "public", "layer-humanize.js"));
 
 const SRC = process.env.SRC || "https://layers-structurecraft.up.railway.app";
-const TARGET = process.argv[2] || "http://localhost:3000";
+const argv = process.argv.slice(2);
+const DRY = argv.includes("--dry");
+const TARGET = argv.find(a => !a.startsWith("--")) || "http://localhost:3000";
 
 // Prefer the dated base-map standards; fall back to the plain ones.
 const STANDARDS = [
@@ -42,14 +44,16 @@ const slug = s => "ot_" + s.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^
   for (const names of STANDARDS) {
     const key = names.find(n => P[n]);
     if (!key) { console.log("(no standard found for", names.join("/"), ")"); continue; }
-    const so = P[key].find(n => n.name === "SC-OBJECTS");
-    if (so) leaves(so);
+    // The object branch is "SC_OBJECTS" (building) or "SC-OBJECTS" (bridge/freeform).
+    const so = P[key].find(n => /^SC[_\-]OBJECTS$/i.test(n.name));
+    if (so) leaves(so); else console.log("  (no SC[_-]OBJECTS branch in", key, ")");
   }
 
   types.sort((a, b) => a.home_layer.localeCompare(b.home_layer));
-  console.log(`Derived ${types.length} object types from SC-OBJECTS leaves. Sample:`);
-  types.slice(0, 12).forEach(t => console.log(`  ${t.home_layer.padEnd(26)} -> ${t.name}  [${t.category}]`));
+  console.log(`Derived ${types.length} object types from every SC-OBJECTS leaf layer (all 3 standards, deduped by name):\n`);
+  types.forEach(t => console.log(`  ${t.home_layer.padEnd(28)} -> ${(t.name || "").padEnd(26)} [${t.category}]`));
 
+  if (DRY) { console.log(`\nDry run — nothing written. Re-run without --dry to import (replace) into ${TARGET}.`); return; }
   const r = await fetch(`${TARGET}/api/object-types/import`, {
     method: "POST", headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ replace: true, types })

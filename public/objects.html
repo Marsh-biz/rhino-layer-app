@@ -61,11 +61,24 @@
   html, body { height: 100%; }
   body {
     font-family: var(--font);
-    background: var(--panel-bg);
+    background: var(--panel-bg-deep);
     color: var(--text);
     font-size: 13px;
     display: flex;
     flex-direction: column;
+    padding: 12px;
+  }
+  /* Floating, rounded, drop-shadowed panel — matches the layer emulator */
+  .panel {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 8px 28px rgba(0,0,0,.45);
   }
 
   /* Title bar — mirrors the layer emulator's */
@@ -128,7 +141,7 @@
     font-size: 11px; color: var(--text-dim); flex: none; white-space: nowrap;
   }
 
-  #list { flex: 1; overflow-y: auto; padding: 10px 12px; background: var(--panel-bg); }
+  #list { flex: 1; min-height: 0; overflow-y: auto; padding: 10px 12px; background: var(--panel-bg); }
   #list::-webkit-scrollbar { width: 10px; }
   #list::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 5px; }
 
@@ -154,10 +167,12 @@
     color: var(--text-dim); font-size: 11.5px; cursor: pointer; white-space: nowrap;
   }
   .del {
+    display: inline-flex; align-items: center; gap: 5px;
     background: transparent; border: 1px solid var(--border-light);
     color: var(--danger); border-radius: 3px; padding: 3px 8px;
-    font-size: 11.5px; cursor: pointer;
+    font-size: 11.5px; cursor: pointer; font-family: var(--font);
   }
+  .del svg { width: 12px; height: 12px; display: block; }
   .del:hover { background: var(--danger-hover-bg); border-color: var(--danger); }
 
   .fl-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
@@ -198,26 +213,61 @@
     color: var(--text-dim); font-size: 11px; background: var(--panel-bg);
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: none;
   }
+
+  /* Confirm modal — native confirm() is blocked in the Notion iframe/popup */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,.55);
+    display: none; align-items: center; justify-content: center; z-index: 100;
+  }
+  .overlay.show { display: flex; }
+  .modal {
+    background: var(--panel-bg); border: 1px solid var(--border-light);
+    border-radius: 6px; padding: 18px; width: min(340px, 88vw);
+    box-shadow: 0 12px 40px rgba(0,0,0,.6);
+  }
+  .modal h3 { font-size: 14px; margin-bottom: 8px; }
+  .modal p { color: var(--text-dim); font-size: 12.5px; margin-bottom: 14px; line-height: 1.45; word-break: break-word; }
+  .modal .actions { display: flex; justify-content: flex-end; gap: 8px; }
+  .modal .btn {
+    background: var(--btn-bg); color: var(--text); border: 1px solid var(--border-light);
+    border-radius: 3px; padding: 5px 12px; font-size: 12px; cursor: pointer; font-family: var(--font);
+  }
+  .modal .btn:hover { background: var(--btn-hover); }
+  .modal .btn.danger { color: var(--danger); }
+  .modal .btn.danger:hover { background: var(--danger-hover-bg); border-color: var(--danger); }
 </style>
 </head>
 <body class="light">
-  <div class="titlebar">
-    <span class="tb-icon" aria-hidden="true">⧉</span>
-    <span>Object Types</span>
-    <span class="sub">expected Branch objects per layer</span>
-    <button class="tool" id="themeToggle" data-tip="Dark mode"></button>
+  <div class="panel">
+    <div class="titlebar">
+      <span class="tb-icon" aria-hidden="true">⧉</span>
+      <span>Object Types</span>
+      <span class="sub">expected Branch objects per layer</span>
+      <button class="tool" id="themeToggle" data-tip="Dark mode"></button>
+    </div>
+
+    <div class="layerbar">
+      <span class="lb-label">Layer</span>
+      <span class="lb-name" id="layer">— none —</span>
+      <span class="lb-count" id="count"></span>
+    </div>
+
+    <div id="list"></div>
+    <div id="parentNotice" class="notice" hidden></div>
+    <button id="add" hidden>+ Add object type for this layer</button>
+    <div class="status" id="status">Waiting for the layer emulator…</div>
   </div>
 
-  <div class="layerbar">
-    <span class="lb-label">Layer</span>
-    <span class="lb-name" id="layer">— none —</span>
-    <span class="lb-count" id="count"></span>
+  <div class="overlay" id="overlay">
+    <div class="modal" role="dialog" aria-modal="true">
+      <h3 id="modalTitle">Delete object type</h3>
+      <p id="modalBody"></p>
+      <div class="actions">
+        <button class="btn" id="modalCancel">Cancel</button>
+        <button class="btn danger" id="modalConfirm">Delete</button>
+      </div>
+    </div>
   </div>
-
-  <div id="list"></div>
-  <div id="parentNotice" class="notice" hidden></div>
-  <button id="add" hidden>+ Add object type for this layer</button>
-  <div class="status" id="status">Waiting for the layer emulator…</div>
 
 <script src="layer-humanize.js"></script>
 <script>
@@ -230,11 +280,32 @@
   const statusEl = document.getElementById("status");
   const parentNotice = document.getElementById("parentNotice");
   const themeBtn = document.getElementById("themeToggle");
+  const overlay = document.getElementById("overlay");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalBody = document.getElementById("modalBody");
+  const modalConfirm = document.getElementById("modalConfirm");
+  const modalCancel = document.getElementById("modalCancel");
 
   const CATEGORIES = ["Glulam", "Steel", "CLT", "DLT", "Blocking", "Timber", "Machining", "Connection", "Other"];
   const SHARED_THEME_KEY = "sc-theme";
   const ICON_SUN = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="8" cy="8" r="3.2"/><path d="M8 1.2v1.8M8 13v1.8M1.2 8H3M13 8h1.8M3.2 3.2l1.3 1.3M11.5 11.5l1.3 1.3M12.8 3.2l-1.3 1.3M4.5 11.5l-1.3 1.3"/></svg>';
   const ICON_MOON = '<svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.4 9.9A5.6 5.6 0 0 1 6.1 2.6 5.9 5.9 0 1 0 13.4 9.9z"/></svg>';
+  const ICON_TRASH = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4h11M6 4V2.7c0-.4.3-.7.7-.7h2.6c.4 0 .7.3.7.7V4M12.3 4l-.5 8.6c0 .6-.5 1-1 1H5.2c-.5 0-1-.4-1-1L3.7 4M6.5 6.8v4M9.5 6.8v4"/></svg>';
+
+  // Custom confirm dialog — native confirm() is suppressed inside the Notion iframe/popup.
+  let confirmCb = null;
+  function askConfirm(title, body, cb) {
+    modalTitle.textContent = title;
+    modalBody.textContent = body;
+    confirmCb = cb;
+    overlay.classList.add("show");
+    modalConfirm.focus();
+  }
+  function closeModal() { overlay.classList.remove("show"); confirmCb = null; }
+  modalConfirm.addEventListener("click", () => { const cb = confirmCb; closeModal(); if (cb) cb(); });
+  modalCancel.addEventListener("click", closeModal);
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) closeModal(); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && overlay.classList.contains("show")) closeModal(); });
 
   let currentLayer = null;
   let currentIsLeaf = true;
@@ -359,8 +430,11 @@
       const cb = document.createElement("input"); cb.type = "checkbox"; cb.checked = !!t.is_primary;
       cb.addEventListener("change", () => { t.is_primary = cb.checked; save(t); });
       prim.appendChild(cb); prim.appendChild(document.createTextNode("primary")); head.appendChild(prim);
-      const del = document.createElement("button"); del.className = "del"; del.textContent = "Delete";
-      del.addEventListener("click", () => { if (confirm("Delete object type “" + (t.name || "") + "”?")) remove(t.id); });
+      const del = document.createElement("button"); del.className = "del";
+      del.innerHTML = ICON_TRASH + "<span>Delete</span>";
+      del.addEventListener("click", () => {
+        askConfirm("Delete object type", "Delete “" + (t.name || "this object type") + "” from " + (currentLayer || "this layer") + "?", () => remove(t.id));
+      });
       head.appendChild(del);
       card.appendChild(head);
       card.appendChild(field("Name", t.name, v => { t.name = v; nm.textContent = v || "(unnamed)"; save(t); }));
