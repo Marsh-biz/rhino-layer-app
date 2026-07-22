@@ -61,7 +61,10 @@
   html, body { height: 100%; }
   body {
     font-family: var(--font);
-    background: var(--panel-bg-deep);
+    /* "Notion white" backdrop behind the floating panel (matches the Notion page
+       the iframe sits on). Intentionally not themed — app/panel colors are untouched
+       and the panel's drop shadow still projects onto this white. */
+    background: #ffffff;
     color: var(--text);
     font-size: 13px;
     display: flex;
