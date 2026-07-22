@@ -127,7 +127,7 @@
   }
   .preset-bar label { color: var(--text-dim); font-size: 11.5px; margin-right: 2px; }
   /* Two clearly separated clusters: preset controls | file (import/export) */
-  .pb-group { display: flex; align-items: center; gap: 6px; }
+  .pb-group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; min-width: 0; }
   .pb-label {
     color: var(--text-dim);
     font-size: 10.5px;
@@ -135,18 +135,18 @@
     letter-spacing: .6px;
     margin-right: 2px;
   }
-  .pb-divider {
-    width: 1px;
-    align-self: stretch;
-    min-height: 24px;
-    background: var(--border-light);
-    margin-left: auto; /* push the divider + file cluster to the right edge */
-  }
+  /* Full-width break: the File cluster always drops onto its own line below the
+     preset controls (line 2, or line 3 if the preset controls have wrapped). */
+  .pb-break { flex-basis: 100%; height: 0; }
   .preset-combo { position: relative; display: inline-flex; }
   .preset-name-input { min-width: 150px; max-width: 220px; height: 26px; }
-  @media (max-width: 560px) {
-    .pb-divider { display: none; }
-    .pb-file { margin-left: 0; }
+  /* Narrow iframe (e.g. Notion with its side panel/toolbar open): collapse the
+     preset + file buttons to icon-only — native title tooltips describe each.
+     Controls always wrap to new lines, so nothing (incl. Auto-save) is clipped. */
+  @media (max-width: 520px) {
+    .preset-bar .btn .btn-label { display: none; }
+    .preset-bar .btn { padding: 5px 7px; }
+    .pb-presets .switch-label { display: none; }
   }
 
   /* Auto-save toggle switch */
@@ -176,6 +176,9 @@
   }
   input[type="text"]::placeholder { color: #6d6d75; }
   .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     background: var(--btn-bg);
     color: var(--text);
     border: 1px solid var(--border-light);
@@ -184,7 +187,9 @@
     font-size: 12px;
     cursor: pointer;
     font-family: var(--font);
+    white-space: nowrap;
   }
+  .btn svg { width: 14px; height: 14px; flex: none; }
   .btn:hover { background: var(--btn-hover); }
   .btn:active { background: var(--btn-active); }
   .btn.danger:hover { background: var(--danger-hover-bg); border-color: var(--danger); }
@@ -585,9 +590,18 @@
         </button>
         <input type="text" id="presetName" class="preset-name-input" placeholder="Name this preset…" style="display:none">
       </div>
-      <button class="btn" id="loadPresetBtn">Load</button>
-      <button class="btn" id="savePresetBtn" title="Save the current table as a new named preset">Save As</button>
-      <button class="btn danger" id="deletePresetBtn">Delete</button>
+      <button class="btn" id="loadPresetBtn" title="Load the selected preset into the table">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4.3c0-.6.4-1 1-1h3l1.5 1.5H13c.6 0 1 .4 1 1V12c0 .6-.4 1-1 1H3c-.6 0-1-.4-1-1z"/></svg>
+        <span class="btn-label">Load</span>
+      </button>
+      <button class="btn" id="savePresetBtn" title="Save the current table as a new named preset">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.2 2.6h7.2L13.4 5.6V12.9c0 .3-.2.5-.5.5H3.1c-.3 0-.5-.2-.5-.5V3.1c0-.3.2-.5.5-.5z"/><path d="M5.3 2.6v3.2h4.5V2.6"/><path d="M5.3 13.4V9.3h5.4v4.1"/></svg>
+        <span class="btn-label">Save As</span>
+      </button>
+      <button class="btn danger" id="deletePresetBtn" title="Delete the selected preset">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4h11M6 4V2.7c0-.4.3-.7.7-.7h2.6c.4 0 .7.3.7.7V4M12.3 4l-.5 8.6c0 .6-.5 1-1 1H5.2c-.5 0-1-.4-1-1L3.7 4M6.5 6.8v4M9.5 6.8v4"/></svg>
+        <span class="btn-label">Delete</span>
+      </button>
       <label class="switch" id="autosaveSwitch" title="Auto-save edits back to the loaded preset. Turn off to experiment without changing it.">
         <input type="checkbox" id="autosaveToggle" autocomplete="off">
         <span class="switch-track"><span class="switch-thumb"></span></span>
@@ -595,12 +609,18 @@
       </label>
     </div>
 
-    <span class="pb-divider" aria-hidden="true"></span>
+    <span class="pb-break" aria-hidden="true"></span>
 
     <div class="pb-group pb-file">
       <label class="pb-label">File</label>
-      <button class="btn" id="exportRhinoBtn" title="Download the current table as a Rhino Layer_Export.json">⤓ Export</button>
-      <button class="btn" id="importPresetsBtn" title="Import a Rhino Layer_Export.json or a saved preset file">⤒ Import</button>
+      <button class="btn" id="exportRhinoBtn" title="Download the current table as a Rhino Layer_Export.json">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2.6v6.5M5.2 6.3 8 9.1l2.8-2.8M2.8 12.6h10.4"/></svg>
+        <span class="btn-label">Export</span>
+      </button>
+      <button class="btn" id="importPresetsBtn" title="Import a Rhino Layer_Export.json or a saved preset file">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 9.1V2.6M5.2 5.4 8 2.6l2.8 2.8M2.8 12.6h10.4"/></svg>
+        <span class="btn-label">Import</span>
+      </button>
       <input type="file" id="importFile" accept="application/json" style="display:none">
     </div>
   </div>
