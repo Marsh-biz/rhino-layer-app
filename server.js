@@ -44,14 +44,16 @@ async function initDb() {
       branch_key    TEXT,   -- Branch object type = class name (e.g. TimberLinearBeam)
       branch_prefix TEXT,   -- optional Branch mark TypePrefix refiner (e.g. B=beam, C=column)
       material      TEXT,   -- expected material (grade-collapsed, e.g. Glulam / Steel)
+      origin        TEXT,   -- country of origin / manufacturing location (NA / EU)
       description   TEXT,   -- notes
       updated_at    TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `);
   await db.query("CREATE INDEX IF NOT EXISTS object_types_home_layer_idx ON object_types (home_layer)");
-  // Migrate older schemas: add branch_prefix + material; drop the unused category / is_primary.
+  // Migrate older schemas: add new columns; drop the unused category / is_primary.
   await db.query("ALTER TABLE object_types ADD COLUMN IF NOT EXISTS branch_prefix TEXT");
   await db.query("ALTER TABLE object_types ADD COLUMN IF NOT EXISTS material TEXT");
+  await db.query("ALTER TABLE object_types ADD COLUMN IF NOT EXISTS origin TEXT");
   await db.query("ALTER TABLE object_types DROP COLUMN IF EXISTS category");
   await db.query("ALTER TABLE object_types DROP COLUMN IF EXISTS is_primary");
   console.log("Postgres connected; presets + settings + object_types tables ready.");
@@ -139,16 +141,18 @@ async function upsertObjectType(row) {
     branch_key: row.branch_key ? String(row.branch_key) : null,
     branch_prefix: row.branch_prefix ? String(row.branch_prefix) : null,
     material: row.material ? String(row.material) : null,
+    origin: row.origin ? String(row.origin) : null,
     description: row.description ? String(row.description) : null,
   };
   if (db) {
     await db.query(
-      `INSERT INTO object_types (id, name, home_layer, branch_key, branch_prefix, material, description, updated_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7, now())
+      `INSERT INTO object_types (id, name, home_layer, branch_key, branch_prefix, material, origin, description, updated_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8, now())
        ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, home_layer=EXCLUDED.home_layer,
          branch_key=EXCLUDED.branch_key, branch_prefix=EXCLUDED.branch_prefix,
-         material=EXCLUDED.material, description=EXCLUDED.description, updated_at=now()`,
-      [t.id, t.name, t.home_layer, t.branch_key, t.branch_prefix, t.material, t.description]
+         material=EXCLUDED.material, origin=EXCLUDED.origin,
+         description=EXCLUDED.description, updated_at=now()`,
+      [t.id, t.name, t.home_layer, t.branch_key, t.branch_prefix, t.material, t.origin, t.description]
     );
     return t;
   }

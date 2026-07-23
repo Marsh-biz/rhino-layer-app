@@ -51,6 +51,7 @@
     SEGMENT: "Segment", LINEWORK: "Linework", LINE: "Line", LINES: "Lines",
     ELEVATION: "Elevation", TEXT: "Text", GRID: "Grid", GRIDLINES: "Gridlines",
     FLOR: "Floor", FLOOR: "Floor", DETL: "Detail",
+    BOP: "Bought Out Part", LUM: "Lumber", LUMBER: "Lumber",
   };
 
   // Tokens kept fully uppercase (acronyms / codes).
@@ -101,7 +102,7 @@
     if (/(^|[_\-])STL([_\-]|$)|STEEL|(^|[_\-])PLATE([_\-]|$)|(^|[_\-])ANGLE([_\-]|$)/.test(n)) return m("Part3d");
     // Timber linear members — beam vs column by mark prefix
     if (/COLUMN|(^|[_\-])POST([_\-]|$)/.test(n)) return m("TimberLinearBeam", "C");
-    if (/(^|[_\-])GLM([_\-]|$)|(^|[_\-])GL([_\-]|$)|GLULAM|BEAM|GIRDER|PURLIN|TRUSS|BILLET|(^|[_\-])BLK([_\-]|$)|BLOCKING|RING_BEAM|LATH/.test(n)) return m("TimberLinearBeam", "B");
+    if (/(^|[_\-])GLM([_\-]|$)|(^|[_\-])GL([_\-]|$)|GLULAM|BEAM|GIRDER|PURLIN|TRUSS|BILLET|(^|[_\-])BLK([_\-]|$)|BLOCKING|RING_BEAM|LATH|(^|[_\-])LUM([_\-]|$)|LUMBER/.test(n)) return m("TimberLinearBeam", "B");
     return m("", "");
   }
 
@@ -118,13 +119,23 @@
     if (/TOOL|(^|[_\-])DAP([_\-]|$)|(^|[_\-])PEN([_\-]|$)|CUTTING|CHASE|OPENING|DRILL|FASTENER|(^|[_\-])FAST([_\-]|$)|CONN|^CE[_\-]|BOLT|SCREW|WASHER|(^|[_\-])NUT([_\-]|$)/.test(n)) return "";
     if (/(^|[_\-])DLT([_\-]|$)/.test(n)) return "DLT";
     if (/(^|[_\-])CLT([_\-]|$)/.test(n)) return "CLT";
+    if (/(^|[_\-])LUM([_\-]|$)|LUMBER/.test(n)) return "Sawn Lumber";
     if (/(^|[_\-])GLM([_\-]|$)|(^|[_\-])GL([_\-]|$)|GLULAM|BEAM|GIRDER|PURLIN|TRUSS|BILLET|COLUMN|POST/.test(n)) return "Glulam";
     if (/(^|[_\-])STL([_\-]|$)|STEEL|(^|[_\-])PLATE([_\-]|$)|(^|[_\-])ANGLE([_\-]|$)/.test(n)) return "Steel";
     return "";
   }
 
+  // Country of origin / manufacturing location, from the layer's region token.
+  const ORIGINS = ["NA", "EU"];
+  function guessOrigin(name) {
+    const n = String(name || "").toUpperCase();
+    if (/(^|[_\-])EU([_\-]|$)/.test(n)) return "EU";
+    if (/(^|[_\-])NA([_\-]|$)/.test(n)) return "NA";
+    return "";
+  }
+
   return {
     humanizeLayer: humanizeLayer, guessBranchMatch: guessBranchMatch, guessMaterial: guessMaterial,
-    MATERIALS: MATERIALS, BRANCH_CLASSES: BRANCH_CLASSES, MAP: MAP,
+    guessOrigin: guessOrigin, MATERIALS: MATERIALS, BRANCH_CLASSES: BRANCH_CLASSES, ORIGINS: ORIGINS, MAP: MAP,
   };
 });

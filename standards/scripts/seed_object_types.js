@@ -4,7 +4,7 @@
 // Name + Branch match (class + prefix) come from the shared glossary (public/layer-humanize.js).
 // Usage: node seed_object_types.js [targetBase] [--dry]   (default target = http://localhost:3000)
 const path = require("path");
-const { humanizeLayer, guessBranchMatch, guessMaterial } = require(path.join(__dirname, "..", "..", "public", "layer-humanize.js"));
+const { humanizeLayer, guessBranchMatch, guessMaterial, guessOrigin } = require(path.join(__dirname, "..", "..", "public", "layer-humanize.js"));
 
 const SRC = process.env.SRC || "https://layers-structurecraft.up.railway.app";
 const argv = process.argv.slice(2);
@@ -37,6 +37,7 @@ const slug = s => "ot_" + s.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^
           branch_key: bm.branch_key,
           branch_prefix: bm.branch_prefix,
           material: guessMaterial(c.name),
+          origin: guessOrigin(c.name),
           description: "",
         });
       }
