@@ -1,10 +1,10 @@
 "use strict";
 // Derive the object-type catalog from the standards' SC-OBJECTS leaves.
 // Reads standards from SRC (live Railway), writes the catalog to TARGET.
-// Names/categories come from the shared acronym glossary (public/layer-humanize.js).
-// Usage: node seed_object_types.js [targetBase]   (default target = http://localhost:3000)
+// Name + Branch match (class + prefix) come from the shared glossary (public/layer-humanize.js).
+// Usage: node seed_object_types.js [targetBase] [--dry]   (default target = http://localhost:3000)
 const path = require("path");
-const { humanizeLayer, guessCategory } = require(path.join(__dirname, "..", "..", "public", "layer-humanize.js"));
+const { humanizeLayer, guessBranchMatch } = require(path.join(__dirname, "..", "..", "public", "layer-humanize.js"));
 
 const SRC = process.env.SRC || "https://layers-structurecraft.up.railway.app";
 const argv = process.argv.slice(2);
@@ -29,14 +29,14 @@ const slug = s => "ot_" + s.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^
       if (c.children && c.children.length) leaves(c);
       else if (!seen.has(c.name)) {
         seen.add(c.name);
+        const bm = guessBranchMatch(c.name);
         types.push({
           id: slug(c.name),
           name: humanizeLayer(c.name),
-          category: guessCategory(c.name),
-          description: "",
           home_layer: c.name,
-          branch_key: null,
-          is_primary: true,
+          branch_key: bm.branch_key,
+          branch_prefix: bm.branch_prefix,
+          description: "",
         });
       }
     }
@@ -51,7 +51,7 @@ const slug = s => "ot_" + s.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^
 
   types.sort((a, b) => a.home_layer.localeCompare(b.home_layer));
   console.log(`Derived ${types.length} object types from every SC-OBJECTS leaf layer (all 3 standards, deduped by name):\n`);
-  types.forEach(t => console.log(`  ${t.home_layer.padEnd(28)} -> ${(t.name || "").padEnd(26)} [${t.category}]`));
+  types.forEach(t => console.log(`  ${t.home_layer.padEnd(28)} -> ${(t.name || "").padEnd(24)} [${t.branch_key || "?"}${t.branch_prefix ? "/" + t.branch_prefix : ""}]`));
 
   if (DRY) { console.log(`\nDry run — nothing written. Re-run without --dry to import (replace) into ${TARGET}.`); return; }
   const r = await fetch(`${TARGET}/api/object-types/import`, {

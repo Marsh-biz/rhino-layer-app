@@ -79,19 +79,31 @@
     return toks.map(tokenToWord).join(" ");
   }
 
-  // Best-guess category from the full (unstripped) layer name.
-  function guessCategory(name) {
+  // Best-guess Branch match from the full layer name: { branch_key (class), branch_prefix }.
+  // Grounded in a live authoring model — the reliable discriminators are the Branch
+  // class (GetType().Name) and the mark TypePrefix (B=beam, C=column). Material is
+  // often "Unset", so class carries the material family (timber vs steel) instead.
+  // Order matters: machining / fastener / connection tokens win over the member class.
+  function guessBranchMatch(name) {
     const n = String(name || "").toUpperCase();
-    if (/TOOL|DAP|PEN|CHASE|OPENING|CUTTING|CUTTERS|DRILL|PLANE/.test(n)) return "Machining";
-    if (/^CE[_\-]|(^|[_\-])CONN([_\-]|$)|FASTENER|(^|[_\-])FAST([_\-]|$)/.test(n)) return "Connection";
-    if (/(^|[_\-])GLM([_\-]|$)|GLULAM/.test(n)) return "Glulam";
-    if (/(^|[_\-])STL([_\-]|$)|STEEL/.test(n)) return "Steel";
-    if (/(^|[_\-])CLT([_\-]|$)/.test(n)) return "CLT";
-    if (/(^|[_\-])DLT([_\-]|$)/.test(n)) return "DLT";
-    if (/(^|[_\-])BLK([_\-]|$)|BLOCKING/.test(n)) return "Blocking";
-    if (/TIMBER/.test(n)) return "Timber";
-    return "Other";
+    const m = (branch_key, branch_prefix) => ({ branch_key: branch_key, branch_prefix: branch_prefix || "" });
+    // Machining objects (cuts that remove material)
+    if (/(^|[_\-])DAP([_\-]|$)|DAPS/.test(n)) return m("Dap2d");
+    if (/(^|[_\-])(PEN|OPENING|CUTTING|CHASE|CUT)([_\-]|$)|PLANAR|PRE_DRILL|DRILL/.test(n)) return m("PlanarCut");
+    // Fasteners & loose hardware
+    if (/FASTENER|(^|[_\-])FAST([_\-]|$)|BOLT|SCREW|WASHER|(^|[_\-])NUT([_\-]|$)|(^|[_\-])ROD([_\-]|$)|ANCHOR/.test(n)) return m("Fastener1d");
+    // Connection entities (CE library)
+    if (/^CE[_\-\s]|(^|[_\-])CONN([_\-]|$)|CONNECTION|EMBED|LEDGER|SHIM|PLUG|BRACE|SPACER|PREFAB|RUBBER|(^|[_\-])CE([_\-]|$)/.test(n)) return m("ConnectionInstance");
+    // Mass-timber panels
+    if (/(^|[_\-])DLT([_\-]|$)/.test(n)) return m("DLT");
+    if (/(^|[_\-])CLT([_\-]|$)/.test(n)) return m("CLT");
+    // Steel members / plates / profiles
+    if (/(^|[_\-])STL([_\-]|$)|STEEL|(^|[_\-])PLATE([_\-]|$)|(^|[_\-])ANGLE([_\-]|$)/.test(n)) return m("Part3d");
+    // Timber linear members — beam vs column by mark prefix
+    if (/COLUMN|(^|[_\-])POST([_\-]|$)/.test(n)) return m("TimberLinearBeam", "C");
+    if (/(^|[_\-])GLM([_\-]|$)|(^|[_\-])GL([_\-]|$)|GLULAM|BEAM|GIRDER|PURLIN|TRUSS|BILLET|(^|[_\-])BLK([_\-]|$)|BLOCKING|RING_BEAM|LATH/.test(n)) return m("TimberLinearBeam", "B");
+    return m("", "");
   }
 
-  return { humanizeLayer: humanizeLayer, guessCategory: guessCategory, MAP: MAP };
+  return { humanizeLayer: humanizeLayer, guessBranchMatch: guessBranchMatch, MAP: MAP };
 });

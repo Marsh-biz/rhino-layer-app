@@ -1,7 +1,7 @@
 "use strict";
-// Re-derive object-type NAME + CATEGORY for existing catalog rows from their
-// home_layer, using the shared acronym glossary (public/layer-humanize.js).
-// Preserves id, home_layer, branch_key, description, and is_primary.
+// Re-derive NAME + BRANCH MATCH (branch_key class + branch_prefix) for existing
+// catalog rows from their home_layer, using the shared glossary (public/layer-humanize.js).
+// Preserves id, home_layer, and description (notes).
 //
 // Dry-run by default (prints the before/after diff, changes nothing).
 // Pass --apply to actually write the updates.
@@ -10,11 +10,13 @@
 //   node repopulate_object_names.js [targetBase] [--apply]
 //   (default target = http://localhost:3000)
 const path = require("path");
-const { humanizeLayer, guessCategory } = require(path.join(__dirname, "..", "..", "public", "layer-humanize.js"));
+const { humanizeLayer, guessBranchMatch } = require(path.join(__dirname, "..", "..", "public", "layer-humanize.js"));
 
 const args = process.argv.slice(2);
 const APPLY = args.includes("--apply");
 const TARGET = args.find(a => !a.startsWith("--")) || "http://localhost:3000";
+
+const sig = t => `${t.branch_key || ""}${t.branch_prefix ? "/" + t.branch_prefix : ""}`;
 
 (async function () {
   const { types } = await (await fetch(`${TARGET}/api/object-types`)).json();
@@ -24,19 +26,20 @@ const TARGET = args.find(a => !a.startsWith("--")) || "http://localhost:3000";
   for (const t of types) {
     const layer = t.home_layer || "";
     const newName = humanizeLayer(layer) || t.name;
-    const newCat = guessCategory(layer);
+    const bm = guessBranchMatch(layer);
     const nameChanged = newName && newName !== t.name;
-    const catChanged = newCat && newCat !== t.category;
-    if (nameChanged || catChanged) {
-      changes.push({ t, newName, newCat, nameChanged, catChanged });
-    }
+    const matchChanged = (bm.branch_key || "") !== (t.branch_key || "") ||
+                         (bm.branch_prefix || "") !== (t.branch_prefix || "");
+    if (nameChanged || matchChanged) changes.push({ t, newName, bm, nameChanged, matchChanged });
   }
 
   console.log(`${types.length} object types; ${changes.length} would change.\n`);
   for (const c of changes) {
-    const nm = c.nameChanged ? `"${c.t.name}" -> "${c.newName}"` : `(name kept "${c.t.name}")`;
-    const ct = c.catChanged ? `[${c.t.category || "-"}] -> [${c.newCat}]` : "";
-    console.log(`  ${String(c.t.home_layer || "").padEnd(26)} ${nm}  ${ct}`);
+    const nm = c.nameChanged ? `"${c.t.name}" -> "${c.newName}"` : `(name "${c.t.name}")`;
+    const before = sig(c.t) || "-";
+    const after = `${c.bm.branch_key || "?"}${c.bm.branch_prefix ? "/" + c.bm.branch_prefix : ""}`;
+    const mt = c.matchChanged ? `match [${before}] -> [${after}]` : "";
+    console.log(`  ${String(c.t.home_layer || "").padEnd(28)} ${nm}  ${mt}`);
   }
 
   if (!APPLY) {
@@ -49,11 +52,10 @@ const TARGET = args.find(a => !a.startsWith("--")) || "http://localhost:3000";
     const body = {
       id: c.t.id,
       name: c.newName,
-      category: c.newCat,
-      description: c.t.description || "",
       home_layer: c.t.home_layer,
-      branch_key: c.t.branch_key || "",
-      is_primary: !!c.t.is_primary,
+      branch_key: c.bm.branch_key || "",
+      branch_prefix: c.bm.branch_prefix || "",
+      description: c.t.description || "",
     };
     const r = await fetch(`${TARGET}/api/object-types/${encodeURIComponent(c.t.id)}`, {
       method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body)

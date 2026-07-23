@@ -38,17 +38,20 @@ async function initDb() {
   `);
   await db.query(`
     CREATE TABLE IF NOT EXISTS object_types (
-      id          TEXT PRIMARY KEY,
-      name        TEXT NOT NULL,
-      category    TEXT,
-      description TEXT,
-      home_layer  TEXT,
-      branch_key  TEXT,
-      is_primary  BOOLEAN NOT NULL DEFAULT false,
-      updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+      id            TEXT PRIMARY KEY,
+      name          TEXT NOT NULL,
+      home_layer    TEXT,
+      branch_key    TEXT,   -- Branch object type = class name (e.g. TimberLinearBeam)
+      branch_prefix TEXT,   -- optional Branch mark TypePrefix refiner (e.g. B=beam, C=column)
+      description   TEXT,   -- notes
+      updated_at    TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `);
   await db.query("CREATE INDEX IF NOT EXISTS object_types_home_layer_idx ON object_types (home_layer)");
+  // Migrate older schemas: add branch_prefix; drop the now-unused category / is_primary.
+  await db.query("ALTER TABLE object_types ADD COLUMN IF NOT EXISTS branch_prefix TEXT");
+  await db.query("ALTER TABLE object_types DROP COLUMN IF EXISTS category");
+  await db.query("ALTER TABLE object_types DROP COLUMN IF EXISTS is_primary");
   console.log("Postgres connected; presets + settings + object_types tables ready.");
 }
 
@@ -113,14 +116,13 @@ async function deletePreset(name) {
 function sortTypes(rows) {
   return rows.sort((a, b) =>
     (a.home_layer || "").localeCompare(b.home_layer || "") ||
-    (b.is_primary ? 1 : 0) - (a.is_primary ? 1 : 0) ||
     (a.name || "").localeCompare(b.name || ""));
 }
 async function listObjectTypes(homeLayer) {
   if (db) {
     const r = homeLayer
-      ? await db.query("SELECT * FROM object_types WHERE home_layer = $1 ORDER BY is_primary DESC, name", [homeLayer])
-      : await db.query("SELECT * FROM object_types ORDER BY home_layer, is_primary DESC, name");
+      ? await db.query("SELECT * FROM object_types WHERE home_layer = $1 ORDER BY name", [homeLayer])
+      : await db.query("SELECT * FROM object_types ORDER BY home_layer, name");
     return r.rows;
   }
   let rows = [...objectTypesMemory.values()];
@@ -131,20 +133,19 @@ async function upsertObjectType(row) {
   const t = {
     id: (row.id && String(row.id)) || crypto.randomUUID(),
     name: String(row.name || "").trim(),
-    category: row.category ? String(row.category) : null,
-    description: row.description ? String(row.description) : null,
     home_layer: row.home_layer ? String(row.home_layer) : null,
     branch_key: row.branch_key ? String(row.branch_key) : null,
-    is_primary: !!row.is_primary,
+    branch_prefix: row.branch_prefix ? String(row.branch_prefix) : null,
+    description: row.description ? String(row.description) : null,
   };
   if (db) {
     await db.query(
-      `INSERT INTO object_types (id, name, category, description, home_layer, branch_key, is_primary, updated_at)
-       VALUES ($1,$2,$3,$4,$5,$6,$7, now())
-       ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, category=EXCLUDED.category,
-         description=EXCLUDED.description, home_layer=EXCLUDED.home_layer,
-         branch_key=EXCLUDED.branch_key, is_primary=EXCLUDED.is_primary, updated_at=now()`,
-      [t.id, t.name, t.category, t.description, t.home_layer, t.branch_key, t.is_primary]
+      `INSERT INTO object_types (id, name, home_layer, branch_key, branch_prefix, description, updated_at)
+       VALUES ($1,$2,$3,$4,$5,$6, now())
+       ON CONFLICT (id) DO UPDATE SET name=EXCLUDED.name, home_layer=EXCLUDED.home_layer,
+         branch_key=EXCLUDED.branch_key, branch_prefix=EXCLUDED.branch_prefix,
+         description=EXCLUDED.description, updated_at=now()`,
+      [t.id, t.name, t.home_layer, t.branch_key, t.branch_prefix, t.description]
     );
     return t;
   }
