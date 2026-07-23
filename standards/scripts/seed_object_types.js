@@ -8,7 +8,10 @@ const { humanizeLayer, guessBranchMatch, guessMaterial, guessOrigin } = require(
 
 const SRC = process.env.SRC || "https://layers-structurecraft.up.railway.app";
 const argv = process.argv.slice(2);
-const DRY = argv.includes("--dry");
+// SAFETY: writing is destructive (import replace:true wipes the whole catalog,
+// including any hand-edited / hand-added object types). It now requires an explicit
+// --replace flag. Without it this is a dry run that changes nothing.
+const REPLACE = argv.includes("--replace");
 const TARGET = argv.find(a => !a.startsWith("--")) || "http://localhost:3000";
 
 // Prefer the dated base-map standards; fall back to the plain ones.
@@ -55,7 +58,13 @@ const slug = s => "ot_" + s.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^
   console.log(`Derived ${types.length} object types from every SC-OBJECTS leaf layer (all 3 standards, deduped by name):\n`);
   types.forEach(t => console.log(`  ${t.home_layer.padEnd(28)} -> ${(t.name || "").padEnd(24)} [${t.branch_key || "?"}${t.branch_prefix ? "/" + t.branch_prefix : ""}]${t.material ? " {" + t.material + "}" : ""}`));
 
-  if (DRY) { console.log(`\nDry run — nothing written. Re-run without --dry to import (replace) into ${TARGET}.`); return; }
+  if (!REPLACE) {
+    console.log(`\nDRY RUN (default) — nothing written.`);
+    console.log(`This would REPLACE (delete + reinsert) all rows at ${TARGET}, destroying any`);
+    console.log(`hand-edited or hand-added object types. Only run with --replace on a fresh/empty`);
+    console.log(`catalog you intend to overwrite:  node seed_object_types.js ${TARGET} --replace`);
+    return;
+  }
   const r = await fetch(`${TARGET}/api/object-types/import`, {
     method: "POST", headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ replace: true, types })

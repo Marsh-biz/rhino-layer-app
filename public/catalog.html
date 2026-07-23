@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Object Catalog</title>
+<style>
+  :root {
+    --panel-bg: #2f2f33; --panel-bg-deep: #26262a; --list-bg: #2f2f33;
+    --row-hover: #3a3a3f; --border: #1e1e21; --border-light: #46464c;
+    --text: #e6e6e8; --text-dim: #9a9aa2; --accent: #4d9fe0; --danger: #d1605c;
+    --btn-bg: #3d3d43; --btn-hover: #4a4a51; --titlebar-a: #3a3a3f; --titlebar-b: #313136;
+    --scroll-thumb: #4a4a51; --gap-bg: rgba(209,96,92,.10); --head-bg: #34343a;
+    --font: "Segoe UI","Inter",system-ui,-apple-system,sans-serif; --mono: "Consolas","SF Mono",monospace;
+  }
+  body.light {
+    --panel-bg: #f0f0f0; --panel-bg-deep: #e4e4e4; --list-bg: #ffffff;
+    --row-hover: #eaf2fb; --border: #ababab; --border-light: #d2d2d2;
+    --text: #1f1f1f; --text-dim: #5c5c5c; --accent: #0078d7; --danger: #c0392b;
+    --btn-bg: #fbfbfb; --btn-hover: #e6f2fc; --titlebar-a: #fbfbfb; --titlebar-b: #ececec;
+    --scroll-thumb: #c2c2c2; --gap-bg: rgba(192,57,43,.08); --head-bg: #f3f3f3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: var(--font); background: #ffffff; color: var(--text); font-size: 13px;
+    display: flex; flex-direction: column; padding: 12px;
+  }
+  .panel {
+    flex: 1; min-height: 0; display: flex; flex-direction: column;
+    background: var(--panel-bg); border: 1px solid var(--border); border-radius: 6px;
+    overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,.187);
+  }
+  .titlebar {
+    display: flex; align-items: center; gap: 8px; padding: 8px 12px; flex: none;
+    background: linear-gradient(var(--titlebar-a), var(--titlebar-b));
+    border-bottom: 1px solid var(--border); font-weight: 600; letter-spacing: .2px;
+  }
+  .titlebar .tb-icon { color: var(--accent); font-size: 20px; line-height: 1; flex: none; }
+  .titlebar .tb-title { white-space: nowrap; flex: none; }
+  .titlebar .sub { color: var(--text-dim); font-weight: 400; font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .titlebar .spacer { flex: 1; }
+  .tbtn {
+    display: inline-flex; align-items: center; gap: 5px; font-family: var(--font); font-size: 12px;
+    background: var(--btn-bg); color: var(--text); border: 1px solid var(--border-light);
+    border-radius: 3px; padding: 4px 9px; cursor: pointer; white-space: nowrap;
+  }
+  .tbtn:hover { background: var(--btn-hover); }
+  .tbtn svg { width: 13px; height: 13px; }
+
+  .toolbar2 {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    padding: 7px 12px; background: var(--panel-bg-deep); border-bottom: 1px solid var(--border); flex: none;
+  }
+  .stat { font-size: 11.5px; color: var(--text-dim); }
+  .stat b { color: var(--text); font-weight: 600; }
+  .stat.gap b { color: var(--danger); }
+  .filter { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+  .filter input[type=text] {
+    background: var(--list-bg); color: var(--text); border: 1px solid var(--border-light);
+    border-radius: 3px; padding: 4px 7px; font-size: 12px; font-family: var(--font); outline: none; width: 180px;
+  }
+  .filter label { font-size: 11.5px; color: var(--text-dim); display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+
+  .scroll { flex: 1; min-height: 0; overflow: auto; background: var(--list-bg); }
+  .scroll::-webkit-scrollbar { width: 10px; height: 10px; }
+  .scroll::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 5px; }
+
+  table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+  thead th {
+    position: sticky; top: 0; z-index: 1; text-align: left; font-weight: 600;
+    background: var(--head-bg); color: var(--text); padding: 7px 10px;
+    border-bottom: 1px solid var(--border-light); white-space: nowrap;
+  }
+  tbody td { padding: 6px 10px; border-bottom: 1px solid var(--row-line, rgba(128,128,128,.18)); vertical-align: top; }
+  tbody tr:hover { background: var(--row-hover); }
+  td.layer { font-family: var(--mono); color: var(--accent); white-space: nowrap; }
+  td.name { font-weight: 600; }
+  td.branch { font-family: var(--mono); }
+  .prefix { color: var(--text-dim); }
+  .muted { color: var(--text-dim); }
+  .pill {
+    display: inline-block; font-size: 10.5px; padding: 1px 6px; border-radius: 9px;
+    border: 1px solid var(--border-light); color: var(--text-dim);
+  }
+  tr.gap td.branch { background: var(--gap-bg); }
+  tr.gap td.branch::after { content: " missing"; color: var(--danger); font-size: 10.5px; font-family: var(--font); }
+  .empty { padding: 40px; text-align: center; color: var(--text-dim); }
+
+  @media print {
+    body { padding: 0; background: #fff; }
+    .panel { box-shadow: none; border: none; }
+    .toolbar2 .filter, .tbtn { display: none; }
+    thead th { background: #eee; }
+    .scroll { overflow: visible; }
+  }
+</style>
+</head>
+<body class="light">
+  <div class="panel">
+    <div class="titlebar">
+      <span class="tb-icon" aria-hidden="true">▦</span>
+      <span class="tb-title">Object Catalog</span>
+      <span class="sub">every layer&rsquo;s expected objects</span>
+      <span class="spacer"></span>
+      <button class="tbtn" id="csvBtn" title="Download the catalog as CSV">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2.6v6.5M5.2 6.3 8 9.1l2.8-2.8M2.8 12.6h10.4"/></svg>
+        CSV
+      </button>
+      <button class="tbtn" id="printBtn" title="Print / save as PDF">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6V2.5h8V6M4 12H2.6V6.5h10.8V12H12M4.5 9.5h7V14h-7z"/></svg>
+        Print
+      </button>
+    </div>
+
+    <div class="toolbar2">
+      <span class="stat" id="statTypes">…</span>
+      <span class="stat" id="statLayers"></span>
+      <span class="stat gap" id="statGaps"></span>
+      <span class="filter">
+        <label><input type="checkbox" id="gapsOnly"> gaps only</label>
+        <input type="text" id="search" placeholder="Filter layer / name / type…">
+      </span>
+    </div>
+
+    <div class="scroll">
+      <table id="tbl">
+        <thead>
+          <tr>
+            <th>Layer</th><th>Name</th><th>Material</th><th>Country of Origin</th><th>Branch type</th>
+          </tr>
+        </thead>
+        <tbody id="rows"><tr><td colspan="5" class="empty">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+  const rowsEl = document.getElementById("rows");
+  const searchEl = document.getElementById("search");
+  const gapsOnlyEl = document.getElementById("gapsOnly");
+  let all = [];
+
+  // ---- theme: follow the shared sc-theme key + live theme broadcasts ----
+  function applyTheme(light) { document.body.classList.toggle("light", !!light); }
+  (function initTheme() {
+    let light = true;
+    try { const s = localStorage.getItem("sc-theme"); if (s === "dark") light = false; } catch (e) {}
+    applyTheme(light);
+  })();
+  if ("BroadcastChannel" in window) {
+    const ch = new BroadcastChannel("sc-objects");
+    ch.onmessage = (e) => { const d = e && e.data; if (d && d.type === "theme") applyTheme(!!d.light); };
+  }
+  window.addEventListener("storage", (e) => { if (e.key === "sc-theme") applyTheme(e.newValue !== "dark"); });
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, c =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+  function branchText(t) {
+    if (!t.branch_key) return "";
+    return t.branch_key + (t.branch_prefix ? " / " + t.branch_prefix : "");
+  }
+
+  function render() {
+    const q = (searchEl.value || "").trim().toLowerCase();
+    const gapsOnly = gapsOnlyEl.checked;
+    let rows = all.slice();
+    if (gapsOnly) rows = rows.filter(t => !t.branch_key);
+    if (q) rows = rows.filter(t =>
+      (t.home_layer || "").toLowerCase().includes(q) ||
+      (t.name || "").toLowerCase().includes(q) ||
+      (t.branch_key || "").toLowerCase().includes(q) ||
+      (t.material || "").toLowerCase().includes(q));
+
+    if (!rows.length) { rowsEl.innerHTML = '<tr><td colspan="5" class="empty">No matching object types.</td></tr>'; return; }
+
+    let lastLayer = null;
+    rowsEl.innerHTML = rows.map(t => {
+      const gap = !t.branch_key ? " gap" : "";
+      // Show the layer only on the first row of a group so multi-type layers read clearly.
+      const showLayer = t.home_layer !== lastLayer; lastLayer = t.home_layer;
+      const bt = branchText(t);
+      return '<tr class="ot' + gap + '">' +
+        '<td class="layer">' + (showLayer ? esc(t.home_layer) : "") + '</td>' +
+        '<td class="name">' + esc(t.name || "") + '</td>' +
+        '<td>' + (t.material ? esc(t.material) : '<span class="muted">—</span>') + '</td>' +
+        '<td>' + (t.origin ? '<span class="pill">' + esc(t.origin) + '</span>' : '<span class="muted">—</span>') + '</td>' +
+        '<td class="branch">' + (bt ? esc(bt) : "") + '</td>' +
+      '</tr>';
+    }).join("");
+  }
+
+  function updateStats() {
+    const layers = new Set(all.map(t => t.home_layer));
+    const gaps = all.filter(t => !t.branch_key).length;
+    document.getElementById("statTypes").innerHTML = "<b>" + all.length + "</b> object types";
+    document.getElementById("statLayers").innerHTML = "across <b>" + layers.size + "</b> layers";
+    document.getElementById("statGaps").innerHTML = gaps ? ("<b>" + gaps + "</b> missing Branch type") : "";
+  }
+
+  function toCSV() {
+    const head = ["Layer", "Name", "Material", "Country of Origin", "Branch type", "Type prefix", "Notes"];
+    const q = s => '"' + String(s == null ? "" : s).replace(/"/g, '""') + '"';
+    const lines = [head.map(q).join(",")];
+    for (const t of all) lines.push([t.home_layer, t.name, t.material, t.origin, t.branch_key, t.branch_prefix, t.description].map(q).join(","));
+    return lines.join("\r\n");
+  }
+  document.getElementById("csvBtn").addEventListener("click", () => {
+    const blob = new Blob([toCSV()], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = "Object_Catalog.csv";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  });
+  document.getElementById("printBtn").addEventListener("click", () => window.print());
+  searchEl.addEventListener("input", render);
+  gapsOnlyEl.addEventListener("change", render);
+
+  (async function load() {
+    try {
+      const r = await fetch("api/object-types");
+      const j = await r.json();
+      all = (j.types || []).slice().sort((a, b) =>
+        (a.home_layer || "").localeCompare(b.home_layer || "") || (a.name || "").localeCompare(b.name || ""));
+      updateStats();
+      render();
+    } catch (e) {
+      rowsEl.innerHTML = '<tr><td colspan="5" class="empty">Couldn’t reach the server.</td></tr>';
+    }
+  })();
+})();
+</script>
+</body>
+</html>
