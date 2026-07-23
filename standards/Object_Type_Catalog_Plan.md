@@ -48,21 +48,33 @@ Before/at build, connect to a live Branch model (Rhino MCP is available: `list_o
   defines what model-health can check later.
 This replaces every `branch_key = (tbd)` with real values and validates the schema.
 
-## 4. Data model
+## 4. Data model (v2 — verified against a live authoring Branch model 2026-07-23)
 Table `object_types` (Postgres; in-memory fallback when no `DATABASE_URL`, same pattern as presets):
 
 | column | type | notes |
 |--------|------|-------|
-| `id` | TEXT PK | uuid |
-| `name` | TEXT | e.g. "Glulam Beam" |
-| `category` | TEXT | Glulam / Steel / DLT / CLT / BLK / Machining / Connection / … |
-| `description` | TEXT | |
+| `id` | TEXT PK | uuid / slug |
+| `name` | TEXT | human label, e.g. "Glulam Beam" |
 | `home_layer` | TEXT | layer name, e.g. `SC_GLM_BEAM` |
-| `branch_key` | TEXT (nullable) | the Branch class id (fill after model verification) |
-| `is_primary` | BOOLEAN | primary type for its home layer |
+| `branch_key` | TEXT (nullable) | **Branch object type = class name** (`GetType().Name`): `TimberLinearBeam`, `DLT`, `CLT`, `Part3d`, `Dap2d`, `PlanarCut`, `Fastener1d`, `ConnectionInstance` |
+| `branch_prefix` | TEXT (nullable) | optional Branch mark **TypePrefix** refiner — needed to split same-class layers (beam `B` vs column `C`) |
+| `description` | TEXT | notes |
 | `updated_at` | TIMESTAMPTZ | |
 
-A layer's expected types = all rows where `home_layer` = that layer (primary first).
+Dropped in v2: `category` (redundant/derivable) and `is_primary` (not needed — a layer's
+expected types are just the **set** of rows with that `home_layer`).
+
+**Why class + prefix (not material):** a live model (S… authoring, 1,010 objects) showed
+`Material.Species` is usually `"Unset"`, so it can't tell glulam from steel — but the **class**
+does (`TimberLinearBeam` = timber member, `Part3d` = steel, `DLT`/`CLT` = panels), and the mark
+**TypePrefix** splits beam (`B`) from column (`C`) within `TimberLinearBeam`. Probe:
+`standards/scripts/inspect_branch_types.py`. Guess logic: `guessBranchMatch()` in
+`public/layer-humanize.js` (shared by the browser add-form and the seed/repopulate scripts).
+
+Correctness check (goal): for each live Branch object derive `(class, TypePrefix)` → look up the
+catalog row(s) with matching `branch_key` (+ `branch_prefix` if set) → expected `home_layer`;
+flag actual-layer ≠ expected (wrong layer), object on a layer with no matching catalog row (rogue),
+and required layer with no objects (empty). Overlaps with the `rhino-health-check` project.
 
 ## 5. API (server.js)
 - `GET /api/object-types` → `{ types: [...] }`
