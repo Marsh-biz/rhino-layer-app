@@ -101,7 +101,11 @@
     display: inline-flex; align-items: center; justify-content: center;
     color: var(--accent); font-size: 22px; line-height: 1;
   }
-  .titlebar .sub { color: var(--text-dim); font-weight: 400; font-size: 11.5px; margin-left: auto; }
+  .titlebar .tb-title { white-space: nowrap; flex: none; }
+  .titlebar .sub {
+    color: var(--text-dim); font-weight: 400; font-size: 11.5px; margin-left: auto;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0;
+  }
 
   .tool {
     width: 30px; height: 26px;
@@ -245,8 +249,8 @@
   <div class="panel">
     <div class="titlebar">
       <span class="tb-icon" aria-hidden="true">⧉</span>
-      <span>Object Types</span>
-      <span class="sub">Expected objects per layer</span>
+      <span class="tb-title">Object Types</span>
+      <span class="sub">Objects by layer</span>
       <button class="tool" id="themeToggle" data-tip="Dark mode"></button>
     </div>
 
