@@ -4,7 +4,7 @@
 // Name + Branch match (class + prefix) come from the shared glossary (public/layer-humanize.js).
 // Usage: node seed_object_types.js [targetBase] [--dry]   (default target = http://localhost:3000)
 const path = require("path");
-const { humanizeLayer, guessBranchMatch } = require(path.join(__dirname, "..", "..", "public", "layer-humanize.js"));
+const { humanizeLayer, guessBranchMatch, guessMaterial } = require(path.join(__dirname, "..", "..", "public", "layer-humanize.js"));
 
 const SRC = process.env.SRC || "https://layers-structurecraft.up.railway.app";
 const argv = process.argv.slice(2);
@@ -36,6 +36,7 @@ const slug = s => "ot_" + s.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^
           home_layer: c.name,
           branch_key: bm.branch_key,
           branch_prefix: bm.branch_prefix,
+          material: guessMaterial(c.name),
           description: "",
         });
       }
@@ -51,7 +52,7 @@ const slug = s => "ot_" + s.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^
 
   types.sort((a, b) => a.home_layer.localeCompare(b.home_layer));
   console.log(`Derived ${types.length} object types from every SC-OBJECTS leaf layer (all 3 standards, deduped by name):\n`);
-  types.forEach(t => console.log(`  ${t.home_layer.padEnd(28)} -> ${(t.name || "").padEnd(24)} [${t.branch_key || "?"}${t.branch_prefix ? "/" + t.branch_prefix : ""}]`));
+  types.forEach(t => console.log(`  ${t.home_layer.padEnd(28)} -> ${(t.name || "").padEnd(24)} [${t.branch_key || "?"}${t.branch_prefix ? "/" + t.branch_prefix : ""}]${t.material ? " {" + t.material + "}" : ""}`));
 
   if (DRY) { console.log(`\nDry run — nothing written. Re-run without --dry to import (replace) into ${TARGET}.`); return; }
   const r = await fetch(`${TARGET}/api/object-types/import`, {

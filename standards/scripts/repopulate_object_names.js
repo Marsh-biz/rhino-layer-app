@@ -10,7 +10,7 @@
 //   node repopulate_object_names.js [targetBase] [--apply]
 //   (default target = http://localhost:3000)
 const path = require("path");
-const { humanizeLayer, guessBranchMatch } = require(path.join(__dirname, "..", "..", "public", "layer-humanize.js"));
+const { humanizeLayer, guessBranchMatch, guessMaterial } = require(path.join(__dirname, "..", "..", "public", "layer-humanize.js"));
 
 const args = process.argv.slice(2);
 const APPLY = args.includes("--apply");
@@ -27,10 +27,12 @@ const sig = t => `${t.branch_key || ""}${t.branch_prefix ? "/" + t.branch_prefix
     const layer = t.home_layer || "";
     const newName = humanizeLayer(layer) || t.name;
     const bm = guessBranchMatch(layer);
+    const newMat = guessMaterial(layer);
     const nameChanged = newName && newName !== t.name;
     const matchChanged = (bm.branch_key || "") !== (t.branch_key || "") ||
                          (bm.branch_prefix || "") !== (t.branch_prefix || "");
-    if (nameChanged || matchChanged) changes.push({ t, newName, bm, nameChanged, matchChanged });
+    const matChanged = (newMat || "") !== (t.material || "");
+    if (nameChanged || matchChanged || matChanged) changes.push({ t, newName, bm, newMat, nameChanged, matchChanged, matChanged });
   }
 
   console.log(`${types.length} object types; ${changes.length} would change.\n`);
@@ -39,7 +41,8 @@ const sig = t => `${t.branch_key || ""}${t.branch_prefix ? "/" + t.branch_prefix
     const before = sig(c.t) || "-";
     const after = `${c.bm.branch_key || "?"}${c.bm.branch_prefix ? "/" + c.bm.branch_prefix : ""}`;
     const mt = c.matchChanged ? `match [${before}] -> [${after}]` : "";
-    console.log(`  ${String(c.t.home_layer || "").padEnd(28)} ${nm}  ${mt}`);
+    const ml = c.matChanged ? `mat [${c.t.material || "-"}] -> [${c.newMat || "-"}]` : "";
+    console.log(`  ${String(c.t.home_layer || "").padEnd(28)} ${nm}  ${mt} ${ml}`.trimEnd());
   }
 
   if (!APPLY) {
@@ -55,6 +58,7 @@ const sig = t => `${t.branch_key || ""}${t.branch_prefix ? "/" + t.branch_prefix
       home_layer: c.t.home_layer,
       branch_key: c.bm.branch_key || "",
       branch_prefix: c.bm.branch_prefix || "",
+      material: c.newMat || "",
       description: c.t.description || "",
     };
     const r = await fetch(`${TARGET}/api/object-types/${encodeURIComponent(c.t.id)}`, {

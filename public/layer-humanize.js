@@ -105,5 +105,26 @@
     return m("", "");
   }
 
-  return { humanizeLayer: humanizeLayer, guessBranchMatch: guessBranchMatch, MAP: MAP };
+  // Common materials for the dropdown — grade-collapsed from the Branch Materials.xml
+  // product list (Type=Steel/Aluminium + distinct timber Products). Grade is ignored.
+  const MATERIALS = ["Glulam", "CLT", "DLT", "Sawn Lumber", "LVL", "PSL", "Plywood", "OSB", "MDF", "Steel", "Aluminium"];
+
+  // Branch object classes (GetType().Name) seen in live authoring models, plus Assembly.
+  const BRANCH_CLASSES = ["TimberLinearBeam", "DLT", "CLT", "Part3d", "Dap2d", "PlanarCut", "Fastener1d", "ConnectionInstance", "Assembly"];
+
+  // Best-guess material from the layer name (blank for machining / fasteners / connections).
+  function guessMaterial(name) {
+    const n = String(name || "").toUpperCase();
+    if (/TOOL|(^|[_\-])DAP([_\-]|$)|(^|[_\-])PEN([_\-]|$)|CUTTING|CHASE|OPENING|DRILL|FASTENER|(^|[_\-])FAST([_\-]|$)|CONN|^CE[_\-]|BOLT|SCREW|WASHER|(^|[_\-])NUT([_\-]|$)/.test(n)) return "";
+    if (/(^|[_\-])DLT([_\-]|$)/.test(n)) return "DLT";
+    if (/(^|[_\-])CLT([_\-]|$)/.test(n)) return "CLT";
+    if (/(^|[_\-])GLM([_\-]|$)|(^|[_\-])GL([_\-]|$)|GLULAM|BEAM|GIRDER|PURLIN|TRUSS|BILLET|COLUMN|POST/.test(n)) return "Glulam";
+    if (/(^|[_\-])STL([_\-]|$)|STEEL|(^|[_\-])PLATE([_\-]|$)|(^|[_\-])ANGLE([_\-]|$)/.test(n)) return "Steel";
+    return "";
+  }
+
+  return {
+    humanizeLayer: humanizeLayer, guessBranchMatch: guessBranchMatch, guessMaterial: guessMaterial,
+    MATERIALS: MATERIALS, BRANCH_CLASSES: BRANCH_CLASSES, MAP: MAP,
+  };
 });
