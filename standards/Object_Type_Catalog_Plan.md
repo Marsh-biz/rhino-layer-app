@@ -58,6 +58,7 @@ Table `object_types` (Postgres; in-memory fallback when no `DATABASE_URL`, same 
 | `home_layer` | TEXT | layer name, e.g. `SC_GLM_BEAM` |
 | `branch_key` | TEXT (nullable) | **Branch object type = class name** (`GetType().Name`): `TimberLinearBeam`, `DLT`, `CLT`, `Part3d`, `Dap2d`, `PlanarCut`, `Fastener1d`, `ConnectionInstance` |
 | `branch_prefix` | TEXT (nullable) | optional Branch mark **TypePrefix** refiner — needed to split same-class layers (beam `B` vs column `C`) |
+| `material` | TEXT (nullable) | expected material, grade-collapsed dropdown from Branch `Materials.xml` (Glulam / CLT / DLT / Sawn Lumber / LVL / PSL / Plywood / OSB / MDF / Steel / Aluminium). Spec/guidance only — live `Material` is often `Unset`, so not used for matching. |
 | `description` | TEXT | notes |
 | `updated_at` | TIMESTAMPTZ | |
 
