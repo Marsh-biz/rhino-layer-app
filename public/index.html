@@ -140,14 +140,12 @@
   .pb-break { flex-basis: 100%; height: 0; }
   .preset-combo { position: relative; display: inline-flex; }
   .preset-name-input { min-width: 150px; max-width: 220px; height: 26px; }
-  /* Narrow iframe (e.g. Notion with its side panel/toolbar open): collapse the
-     preset + file buttons to icon-only — native title tooltips describe each.
-     Controls always wrap to new lines, so nothing (incl. Auto-save) is clipped. */
-  @media (max-width: 520px) {
-    .preset-bar .btn .btn-label { display: none; }
-    .preset-bar .btn { padding: 5px 7px; }
-    .pb-presets .switch-label { display: none; }
-  }
+  /* Collapse the preset + file buttons to icon-only (native title tooltips describe
+     each). Toggled by JS (.icons-only) the moment the controls would wrap — e.g.
+     Auto-save pushed to a 2nd line — rather than at a fixed width. */
+  .preset-bar.icons-only .btn .btn-label { display: none; }
+  .preset-bar.icons-only .btn { padding: 5px 7px; }
+  .preset-bar.icons-only .pb-presets .switch-label { display: none; }
 
   /* Auto-save toggle switch */
   .switch { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; user-select: none; font-size: 12px; color: var(--text-dim); margin-left: 4px; }
@@ -1014,6 +1012,48 @@
   document.getElementById("catalogBtn").addEventListener("click", () => {
     window.open("catalog.html", "sc-catalog-window", "width=980,height=820");
   });
+
+  // ---- Responsive preset bar: collapse buttons to icon-only when controls wrap ----
+  // We measure against the EXPANDED layout (temporarily remove .icons-only), so the
+  // decision can't oscillate: if the labelled controls would wrap (Auto-save onto a
+  // 2nd line, or the File buttons onto their own extra line), switch to icons.
+  const presetBarEl = document.querySelector(".preset-bar");
+  const presetsGroupEl = document.querySelector(".pb-presets");
+  const fileGroupEl = document.querySelector(".pb-file");
+  const panelEl = document.querySelector(".panel");
+  function groupWraps(grp) {
+    if (!grp) return false;
+    const kids = Array.prototype.filter.call(grp.children, (k) => k.offsetParent !== null);
+    if (kids.length < 2) return false;
+    // Items of different heights centered in ONE row have slightly different offsetTop
+    // (a short label sits a few px below a tall button). So compare against a fraction
+    // of the row height, not a flat pixel count: a genuine 2nd row is a full control
+    // height below, well beyond that intra-row variance.
+    let minTop = Infinity, rowUnit = 0;
+    for (const k of kids) { if (k.offsetTop < minTop) minTop = k.offsetTop; if (k.offsetHeight > rowUnit) rowUnit = k.offsetHeight; }
+    const thresh = Math.max(8, rowUnit * 0.6);
+    for (const k of kids) if (k.offsetTop - minTop > thresh) return true;
+    return false;
+  }
+  function fitPresetBar() {
+    if (!presetBarEl) return;
+    presetBarEl.classList.remove("icons-only"); // measure the expanded layout
+    if (groupWraps(presetsGroupEl) || groupWraps(fileGroupEl)) presetBarEl.classList.add("icons-only");
+  }
+  // Debounce with setTimeout, NOT requestAnimationFrame: rAF is paused in
+  // backgrounded/non-painting tabs, which would freeze the recompute on resize.
+  let _fitTimer = 0;
+  function scheduleFit() { clearTimeout(_fitTimer); _fitTimer = setTimeout(fitPresetBar, 50); }
+  window.addEventListener("resize", scheduleFit);
+  window.addEventListener("load", scheduleFit);
+  if (window.ResizeObserver && panelEl) {
+    let lastW = -1;
+    new ResizeObserver((entries) => {
+      const w = Math.round(entries[0].contentRect.width);
+      if (w !== lastW) { lastW = w; scheduleFit(); } // width-only, so our height toggle can't loop
+    }).observe(panelEl);
+  }
+  fitPresetBar();
 
   // ---- Rendering ----
   function render() {
