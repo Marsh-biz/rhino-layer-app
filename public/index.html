@@ -1010,7 +1010,10 @@
     window.open("objects.html", "sc-objects-window", "width=480,height=760");
   });
   document.getElementById("catalogBtn").addEventListener("click", () => {
-    window.open("catalog.html", "sc-catalog-window", "width=980,height=820");
+    // Scope the catalog to the active preset (passed via URL so it works even when
+    // the catalog opens as a top-level tab outside the Notion iframe's storage partition).
+    const p = selectedPresetName ? ("?preset=" + encodeURIComponent(selectedPresetName)) : "";
+    window.open("catalog.html" + p, "sc-catalog-window", "width=980,height=820");
   });
 
   // ---- Responsive preset bar: collapse buttons to icon-only when controls wrap ----

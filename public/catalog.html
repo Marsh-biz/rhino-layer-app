@@ -141,7 +141,19 @@
   const rowsEl = document.getElementById("rows");
   const searchEl = document.getElementById("search");
   const gapsOnlyEl = document.getElementById("gapsOnly");
+  const params = new URLSearchParams(location.search);
+  const activePreset = params.get("preset") || "";   // scope to the active preset (from the layers app)
   let all = [];
+  let activeLayers = null;   // Set of layer names in the active preset, or null = show everything
+
+  function collectNames(nodes, acc) {
+    for (const n of (nodes || [])) {
+      if (n && n.name) acc.add(n.name);
+      if (n && n.children && n.children.length) collectNames(n.children, acc);
+    }
+    return acc;
+  }
+  function inActive(t) { return !activeLayers || activeLayers.has(t.home_layer); }
 
   // ---- theme: follow the shared sc-theme key + live theme broadcasts ----
   function applyTheme(light) { document.body.classList.toggle("light", !!light); }
@@ -168,7 +180,12 @@
   function render() {
     const q = (searchEl.value || "").trim().toLowerCase();
     const gapsOnly = gapsOnlyEl.checked;
-    let rows = all.slice();
+    const base = all.filter(inActive);
+    if (!base.length) {
+      const msg = activePreset ? ("No cataloged object types for &ldquo;" + esc(activePreset) + "&rdquo;.") : "No object types yet.";
+      rowsEl.innerHTML = '<tr><td colspan="5" class="empty">' + msg + '</td></tr>'; return;
+    }
+    let rows = base;
     if (gapsOnly) rows = rows.filter(t => !t.branch_key);
     if (q) rows = rows.filter(t =>
       (t.home_layer || "").toLowerCase().includes(q) ||
@@ -195,18 +212,26 @@
   }
 
   function updateStats() {
-    const layers = new Set(all.map(t => t.home_layer));
-    const gaps = all.filter(t => !t.branch_key).length;
-    document.getElementById("statTypes").innerHTML = "<b>" + all.length + "</b> object types";
+    const rows = all.filter(inActive);
+    const layers = new Set(rows.map(t => t.home_layer));
+    const gaps = rows.filter(t => !t.branch_key).length;
+    document.getElementById("statTypes").innerHTML = "<b>" + rows.length + "</b> object types";
     document.getElementById("statLayers").innerHTML = "across <b>" + layers.size + "</b> layers";
     document.getElementById("statGaps").innerHTML = gaps ? ("<b>" + gaps + "</b> missing Branch type") : "";
+  }
+  function setScopeLabel() {
+    const sub = document.querySelector(".titlebar .sub");
+    if (!sub) return;
+    if (activePreset && activeLayers) sub.textContent = activePreset;
+    else if (activePreset) sub.textContent = activePreset + " (not found — all shown)";
+    else sub.textContent = "all standards";
   }
 
   function toCSV() {
     const head = ["Layer", "Name", "Material", "Country of Origin", "Branch type", "Type prefix", "Notes"];
     const q = s => '"' + String(s == null ? "" : s).replace(/"/g, '""') + '"';
     const lines = [head.map(q).join(",")];
-    for (const t of all) lines.push([t.home_layer, t.name, t.material, t.origin, t.branch_key, t.branch_prefix, t.description].map(q).join(","));
+    for (const t of all.filter(inActive)) lines.push([t.home_layer, t.name, t.material, t.origin, t.branch_key, t.branch_prefix, t.description].map(q).join(","));
     return lines.join("\r\n");
   }
   document.getElementById("csvBtn").addEventListener("click", () => {
@@ -222,10 +247,20 @@
 
   (async function load() {
     try {
-      const r = await fetch("api/object-types");
-      const j = await r.json();
+      const [otRes, pRes] = await Promise.all([
+        fetch("api/object-types"),
+        activePreset ? fetch("api/presets") : Promise.resolve(null),
+      ]);
+      const j = await otRes.json();
       all = (j.types || []).slice().sort((a, b) =>
         (a.home_layer || "").localeCompare(b.home_layer || "") || (a.name || "").localeCompare(b.name || ""));
+      if (activePreset && pRes) {
+        try {
+          const P = (await pRes.json()).presets || {};
+          if (P[activePreset]) activeLayers = collectNames(P[activePreset], new Set());
+        } catch (e) { /* preset unresolved -> show all */ }
+      }
+      setScopeLabel();
       updateStats();
       render();
     } catch (e) {
