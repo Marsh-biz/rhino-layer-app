@@ -49,7 +49,7 @@
     INSIDE: "Inside", OUTSIDE: "Outside", DECK: "Deck", GUARDRAIL: "Guardrail",
     SILL: "Sill", FLASHING: "Flashing", PLYWOOD: "Plywood", BRIDGE: "Bridge",
     SEGMENT: "Segment", LINEWORK: "Linework", LINE: "Line", LINES: "Lines",
-    ELEVATION: "Elevation", TEXT: "Text", GRID: "Grid", GRIDLINES: "Gridlines",
+    ELEV: "Elevation", ELEVATION: "Elevation", TEXT: "Text", GRID: "Grid", GRIDLINES: "Gridlines",
     FLOR: "Floor", FLOOR: "Floor", DETL: "Detail",
     BOP: "Bought Out Part", LUM: "Lumber", LUMBER: "Lumber",
   };
@@ -109,7 +109,7 @@
     if (/HATCH/.test(n)) return m("Hatch", "");
     if (/(^|[_\-])DIM([_\-]|$)|DIMENSION/.test(n)) return m("Dimension", "");
     if (/LEADER/.test(n)) return m("Leader", "");
-    if (/(^|[_\-])GL([_\-]|$)|(^|[_\-])GRID([_\-]|$)|LINEWORK|(^|[_\-])LINES?([_\-]|$)|GRID[_\-]?LINE|ELEVATION|CENTER[_\-]?LINE|OUTLINE|(^|[_\-])PROFILE([_\-]|$)/.test(n)) return m("Curve", "");
+    if (/(^|[_\-])GL([_\-]|$)|(^|[_\-])GRID([_\-]|$)|LINEWORK|(^|[_\-])LINES?([_\-]|$)|GRID[_\-]?LINE|ELEV|CENTER[_\-]?LINE|OUTLINE|(^|[_\-])PROFILE([_\-]|$)/.test(n)) return m("Curve", "");
     return m("", "");
   }
 
