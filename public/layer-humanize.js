@@ -147,9 +147,22 @@
     return "";
   }
 
+  // Which optional fields are relevant to a given object type. Drives dimming of
+  // unused params in the UI: a field that's empty AND not applicable is de-emphasized.
+  const FIELD_APPLIES = {
+    material: ["TimberLinearBeam", "DLT", "CLT", "Part3d"],
+    origin: ["Part3d", "Fastener1d", "ConnectionInstance", "Assembly"],
+    prefix: ["TimberLinearBeam"],
+  };
+  function fieldApplies(branchKey, field) {
+    const list = FIELD_APPLIES[field];
+    return !!(list && branchKey && list.indexOf(branchKey) !== -1);
+  }
+
   return {
     humanizeLayer: humanizeLayer, guessBranchMatch: guessBranchMatch, guessMaterial: guessMaterial,
-    guessOrigin: guessOrigin, MATERIALS: MATERIALS, BRANCH_CLASSES: BRANCH_CLASSES,
+    guessOrigin: guessOrigin, fieldApplies: fieldApplies,
+    MATERIALS: MATERIALS, BRANCH_CLASSES: BRANCH_CLASSES,
     NATIVE_TYPES: NATIVE_TYPES, ORIGINS: ORIGINS, MAP: MAP,
   };
 });
