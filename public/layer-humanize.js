@@ -115,7 +115,7 @@
 
   // Common materials for the dropdown — grade-collapsed from the Branch Materials.xml
   // product list (Type=Steel/Aluminium + distinct timber Products). Grade is ignored.
-  const MATERIALS = ["Glulam", "CLT", "DLT", "Sawn Lumber", "LVL", "PSL", "Plywood", "OSB", "MDF", "Steel", "Aluminium"];
+  const MATERIALS = ["Glulam", "CLT", "DLT", "Sawn Lumber", "LVL", "PSL", "Plywood", "OSB", "MDF", "Steel", "Aluminium", "Rubber"];
 
   // Branch object classes (GetType().Name) seen in live authoring models, plus Assembly.
   const BRANCH_CLASSES = ["TimberLinearBeam", "DLT", "CLT", "Part3d", "Dap2d", "PlanarCut", "Fastener1d", "ConnectionInstance", "Assembly"];
@@ -128,6 +128,7 @@
   // Best-guess material from the layer name (blank for machining / fasteners / connections).
   function guessMaterial(name) {
     const n = String(name || "").toUpperCase();
+    if (/RUBBER|NEOPRENE/.test(n)) return "Rubber"; // wins over the connection/hardware guard below
     if (/TOOL|(^|[_\-])DAP([_\-]|$)|(^|[_\-])PEN([_\-]|$)|CUTTING|CHASE|OPENING|DRILL|FASTENER|(^|[_\-])FAST([_\-]|$)|CONN|^CE[_\-]|BOLT|SCREW|WASHER|(^|[_\-])NUT([_\-]|$)/.test(n)) return "";
     if (/(^|[_\-])DLT([_\-]|$)/.test(n)) return "DLT";
     if (/(^|[_\-])CLT([_\-]|$)/.test(n)) return "CLT";

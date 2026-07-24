@@ -146,10 +146,12 @@
   let all = [];
   let activeLayers = null;   // Set of layer names in the active preset, or null = show everything
 
-  function collectNames(nodes, acc) {
+  // Only LEAF layers hold objects — a name that is a parent/container in the active
+  // preset must never appear (it can be a leaf in another standard, so we filter per preset).
+  function collectLeafNames(nodes, acc) {
     for (const n of (nodes || [])) {
-      if (n && n.name) acc.add(n.name);
-      if (n && n.children && n.children.length) collectNames(n.children, acc);
+      if (n && n.children && n.children.length) collectLeafNames(n.children, acc);
+      else if (n && n.name) acc.add(n.name);
     }
     return acc;
   }
@@ -257,7 +259,7 @@
       if (activePreset && pRes) {
         try {
           const P = (await pRes.json()).presets || {};
-          if (P[activePreset]) activeLayers = collectNames(P[activePreset], new Set());
+          if (P[activePreset]) activeLayers = collectLeafNames(P[activePreset], new Set());
         } catch (e) { /* preset unresolved -> show all */ }
       }
       setScopeLabel();
