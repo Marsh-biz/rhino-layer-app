@@ -298,6 +298,7 @@
   const H0 = window.LayerHumanize || {};
   const MATERIALS = H0.MATERIALS || [];
   const BRANCH_CLASSES = H0.BRANCH_CLASSES || [];
+  const NATIVE_TYPES = H0.NATIVE_TYPES || [];
   const ORIGINS = H0.ORIGINS || [];
   const ICON_SUN = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><circle cx="8" cy="8" r="3.2"/><path d="M8 1.2v1.8M8 13v1.8M1.2 8H3M13 8h1.8M3.2 3.2l1.3 1.3M11.5 11.5l1.3 1.3M12.8 3.2l-1.3 1.3M4.5 11.5l-1.3 1.3"/></svg>';
   const ICON_MOON = '<svg viewBox="0 0 16 16" fill="currentColor"><path d="M13.4 9.9A5.6 5.6 0 0 1 6.1 2.6 5.9 5.9 0 1 0 13.4 9.9z"/></svg>';
@@ -412,10 +413,15 @@
     let input;
     if (opts.select) {
       input = document.createElement("select");
-      const list = (opts.options || []).slice();
-      if (value && list.indexOf(value) === -1) list.unshift(value); // keep a value not in the list
+      const mkOpt = (o) => { const op = document.createElement("option"); op.value = o; op.textContent = o; return op; };
+      const groups = opts.groups || [{ label: null, options: opts.options || [] }];
+      const known = groups.reduce((a, g) => a.concat(g.options), []);
       if (opts.blank) { const op = document.createElement("option"); op.value = ""; op.textContent = opts.blankLabel || "—"; input.appendChild(op); }
-      list.forEach(o => { const op = document.createElement("option"); op.value = o; op.textContent = o; input.appendChild(op); });
+      if (value && known.indexOf(value) === -1) input.appendChild(mkOpt(value)); // keep a value not in any group
+      for (const g of groups) {
+        if (g.label) { const og = document.createElement("optgroup"); og.label = g.label; g.options.forEach(o => og.appendChild(mkOpt(o))); input.appendChild(og); }
+        else g.options.forEach(o => input.appendChild(mkOpt(o)));
+      }
       input.value = value || "";
     } else if (opts.textarea) {
       input = document.createElement("textarea"); input.value = value || "";
@@ -451,7 +457,7 @@
       card.appendChild(head);
       card.appendChild(field("Material", t.material, v => { t.material = v; save(t); }, { select: true, options: MATERIALS, blank: true, blankLabel: "— material —" }));
       card.appendChild(field("Country of Origin", t.origin, v => { t.origin = v; save(t); }, { select: true, options: ORIGINS, blank: true, blankLabel: "— country —" }));
-      card.appendChild(field("Branch type", t.branch_key, v => { t.branch_key = v; save(t); }, { select: true, options: BRANCH_CLASSES, blank: true, blankLabel: "— type —" }));
+      card.appendChild(field("Object type", t.branch_key, v => { t.branch_key = v; save(t); }, { select: true, blank: true, blankLabel: "— type —", groups: [{ label: "Branch", options: BRANCH_CLASSES }, { label: "Native Rhino", options: NATIVE_TYPES }] }));
       card.appendChild(field("Type prefix", t.branch_prefix, v => { t.branch_prefix = v; save(t); }, { placeholder: "optional mark prefix, e.g. B / C" }));
       card.appendChild(field("Notes", t.description, v => { t.description = v; save(t); }, { textarea: true }));
       listEl.appendChild(card);

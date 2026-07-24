@@ -103,6 +103,13 @@
     // Timber linear members — beam vs column by mark prefix
     if (/COLUMN|(^|[_\-])POST([_\-]|$)/.test(n)) return m("TimberLinearBeam", "C");
     if (/(^|[_\-])GLM([_\-]|$)|(^|[_\-])GL([_\-]|$)|GLULAM|BEAM|GIRDER|PURLIN|TRUSS|BILLET|(^|[_\-])BLK([_\-]|$)|BLOCKING|RING_BEAM|LATH|(^|[_\-])LUM([_\-]|$)|LUMBER/.test(n)) return m("TimberLinearBeam", "B");
+    // Native Rhino objects (checked last, so a Branch layer never falls here):
+    if (/(^|[_\-])TEXT([_\-]|$)/.test(n)) return m("Text", "");
+    if (/(^|[_\-])DOT([_\-]|$)|TEXTDOT/.test(n)) return m("Text Dot", "");
+    if (/HATCH/.test(n)) return m("Hatch", "");
+    if (/(^|[_\-])DIM([_\-]|$)|DIMENSION/.test(n)) return m("Dimension", "");
+    if (/LEADER/.test(n)) return m("Leader", "");
+    if (/LINEWORK|(^|[_\-])LINES?([_\-]|$)|GRID[_\-]?LINE|ELEVATION|CENTER[_\-]?LINE|OUTLINE|(^|[_\-])PROFILE([_\-]|$)/.test(n)) return m("Curve", "");
     return m("", "");
   }
 
@@ -112,6 +119,11 @@
 
   // Branch object classes (GetType().Name) seen in live authoring models, plus Assembly.
   const BRANCH_CLASSES = ["TimberLinearBeam", "DLT", "CLT", "Part3d", "Dap2d", "PlanarCut", "Fastener1d", "ConnectionInstance", "Assembly"];
+
+  // Native Rhino object types (NOT Branch) — annotation, linework, plain geometry.
+  // Stored in the same field as a Branch class; tokens are distinct so the future
+  // correctness engine knows to read these from the Rhino doc, not from br.om.
+  const NATIVE_TYPES = ["Text", "Text Dot", "Curve", "Point", "Hatch", "Dimension", "Leader", "Block"];
 
   // Best-guess material from the layer name (blank for machining / fasteners / connections).
   function guessMaterial(name) {
@@ -136,6 +148,7 @@
 
   return {
     humanizeLayer: humanizeLayer, guessBranchMatch: guessBranchMatch, guessMaterial: guessMaterial,
-    guessOrigin: guessOrigin, MATERIALS: MATERIALS, BRANCH_CLASSES: BRANCH_CLASSES, ORIGINS: ORIGINS, MAP: MAP,
+    guessOrigin: guessOrigin, MATERIALS: MATERIALS, BRANCH_CLASSES: BRANCH_CLASSES,
+    NATIVE_TYPES: NATIVE_TYPES, ORIGINS: ORIGINS, MAP: MAP,
   };
 });
