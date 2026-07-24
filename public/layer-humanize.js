@@ -17,8 +17,8 @@
 
   // token (UPPERCASE) -> display word. Acronyms that should stay uppercase are in KEEP_UPPER.
   const MAP = {
-    // Materials
-    GLM: "Glulam", GL: "Glulam", GLULAM: "Glulam", STL: "Steel", STEEL: "Steel",
+    // Materials  (NB: GL = gridlines, not glulam — glulam is GLM / GLULAM)
+    GLM: "Glulam", GL: "Gridlines", GLULAM: "Glulam", STL: "Steel", STEEL: "Steel",
     BLK: "Blocking", BLOCKING: "Blocking", TIMBER: "Timber",
     // Primary members
     BEAM: "Beam", COLUMN: "Column", POST: "Post", WALL: "Wall", PANEL: "Panel",
@@ -102,14 +102,14 @@
     if (/(^|[_\-])STL([_\-]|$)|STEEL|(^|[_\-])PLATE([_\-]|$)|(^|[_\-])ANGLE([_\-]|$)/.test(n)) return m("Part3d");
     // Timber linear members — beam vs column by mark prefix
     if (/COLUMN|(^|[_\-])POST([_\-]|$)/.test(n)) return m("TimberLinearBeam", "C");
-    if (/(^|[_\-])GLM([_\-]|$)|(^|[_\-])GL([_\-]|$)|GLULAM|BEAM|GIRDER|PURLIN|TRUSS|BILLET|(^|[_\-])BLK([_\-]|$)|BLOCKING|RING_BEAM|LATH|(^|[_\-])LUM([_\-]|$)|LUMBER/.test(n)) return m("TimberLinearBeam", "B");
+    if (/(^|[_\-])GLM([_\-]|$)|GLULAM|BEAM|GIRDER|PURLIN|TRUSS|BILLET|(^|[_\-])BLK([_\-]|$)|BLOCKING|RING_BEAM|LATH|(^|[_\-])LUM([_\-]|$)|LUMBER/.test(n)) return m("TimberLinearBeam", "B");
     // Native Rhino objects (checked last, so a Branch layer never falls here):
     if (/(^|[_\-])TEXT([_\-]|$)/.test(n)) return m("Text", "");
     if (/(^|[_\-])DOT([_\-]|$)|TEXTDOT/.test(n)) return m("Text Dot", "");
     if (/HATCH/.test(n)) return m("Hatch", "");
     if (/(^|[_\-])DIM([_\-]|$)|DIMENSION/.test(n)) return m("Dimension", "");
     if (/LEADER/.test(n)) return m("Leader", "");
-    if (/LINEWORK|(^|[_\-])LINES?([_\-]|$)|GRID[_\-]?LINE|ELEVATION|CENTER[_\-]?LINE|OUTLINE|(^|[_\-])PROFILE([_\-]|$)/.test(n)) return m("Curve", "");
+    if (/(^|[_\-])GL([_\-]|$)|(^|[_\-])GRID([_\-]|$)|LINEWORK|(^|[_\-])LINES?([_\-]|$)|GRID[_\-]?LINE|ELEVATION|CENTER[_\-]?LINE|OUTLINE|(^|[_\-])PROFILE([_\-]|$)/.test(n)) return m("Curve", "");
     return m("", "");
   }
 
@@ -133,7 +133,7 @@
     if (/(^|[_\-])DLT([_\-]|$)/.test(n)) return "DLT";
     if (/(^|[_\-])CLT([_\-]|$)/.test(n)) return "CLT";
     if (/(^|[_\-])LUM([_\-]|$)|LUMBER/.test(n)) return "Sawn Lumber";
-    if (/(^|[_\-])GLM([_\-]|$)|(^|[_\-])GL([_\-]|$)|GLULAM|BEAM|GIRDER|PURLIN|TRUSS|BILLET|COLUMN|POST/.test(n)) return "Glulam";
+    if (/(^|[_\-])GLM([_\-]|$)|GLULAM|BEAM|GIRDER|PURLIN|TRUSS|BILLET|COLUMN|POST/.test(n)) return "Glulam";
     if (/(^|[_\-])STL([_\-]|$)|STEEL|(^|[_\-])PLATE([_\-]|$)|(^|[_\-])ANGLE([_\-]|$)/.test(n)) return "Steel";
     return "";
   }
